@@ -16,13 +16,16 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `restaurating-react_${name}`);
+export const createTable = pgTableCreator(
+  (name) => `restaurating-react_${name}`,
+);
 
-export const posts = createTable(
-  "post",
+export const categories = createTable(
+  "category",
   {
     id: serial("id").primaryKey(),
-    name: varchar("name", { length: 256 }),
+    name: varchar("name", { length: 30 }),
+    description: varchar("description", { length: 256 }),
     createdAt: timestamp("created_at", { withTimezone: true })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -30,5 +33,5 @@ export const posts = createTable(
   },
   (example) => ({
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );

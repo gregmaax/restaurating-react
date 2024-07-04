@@ -1,7 +1,10 @@
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  //const categories = await db.query.categories.findMany();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      {process.env.NODE_ENV}
+    <main className="container">
+      <div className="flex flex-wrap gap-4">{process.env.NODE_ENV}</div>
     </main>
   );
 }
