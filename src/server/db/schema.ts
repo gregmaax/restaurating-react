@@ -20,18 +20,12 @@ export const createTable = pgTableCreator(
   (name) => `restaurating-react_${name}`,
 );
 
-export const categories = createTable(
-  "category",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 30 }),
-    description: varchar("description", { length: 256 }),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  },
-  (example) => ({
-    nameIndex: index("name_idx").on(example.name),
-  }),
-);
+export const categories = createTable("category", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 30 }),
+  description: varchar("description", { length: 256 }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+});
