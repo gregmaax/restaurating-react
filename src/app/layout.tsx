@@ -1,6 +1,7 @@
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
+import Header from "~/components/header";
 
 export const metadata = {
   title: "Restaurating",
@@ -10,7 +11,7 @@ export const metadata = {
 
 function TopNav() {
   return (
-    <nav className="flex items-center justify-between w-full p-4 text-xl font-semibold border-b">
+    <nav className="flex w-full items-center justify-between border-b p-4 text-xl font-semibold">
       <div>Categories</div>
       <button>Sign in</button>
     </nav>
@@ -25,7 +26,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} flex flex-col gap-4`}>
       <body>
-        <TopNav />
+        <Header />
         {children}
       </body>
     </html>

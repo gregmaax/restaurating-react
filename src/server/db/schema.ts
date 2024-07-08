@@ -29,3 +29,5 @@ export const categories = createTable("category", {
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
 });
+
+export type Category = typeof categories.$inferSelect;
