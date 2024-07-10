@@ -7,7 +7,7 @@ export default async function CategoriesList({
   categories: Category[];
 }) {
   return (
-    <main className="grid grid-cols-4 gap-4">
+    <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-4">
       {categories.map((category) => (
         <Card key={category.id}>
           <CardHeader>
@@ -16,6 +16,6 @@ export default async function CategoriesList({
           </CardHeader>
         </Card>
       ))}
-    </main>
+    </div>
   );
 }

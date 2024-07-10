@@ -5,7 +5,7 @@ import {
   NavigationMenu,
   NavigationMenuLink,
   NavigationMenuList,
-} from "./ui/navigation-menu";
+} from "../ui/navigation-menu";
 import {
   Sheet,
   SheetContent,
@@ -13,8 +13,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import { Button } from "./ui/button";
+} from "../ui/sheet";
+import { Button } from "../ui/button";
 
 export default function Header() {
   return (

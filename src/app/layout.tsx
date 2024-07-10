@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import Header from "~/components/header";
+import Header from "~/components/shared/header";
 
 export const metadata = {
   title: "Restaurating",
