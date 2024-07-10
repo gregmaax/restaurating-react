@@ -15,12 +15,14 @@ export const createCategory = async (
     return { error: "Erreur ! Champs invalides" };
   }
 
+  /*
   await db.insert(categories).values({
     name: values.name,
     description: values.description,
   });
 
   revalidatePath("/");
+  */
 
   return { success: "Votre catégorie a bien été enregistrée !" };
 };
