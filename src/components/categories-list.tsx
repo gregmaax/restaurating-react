@@ -1,4 +1,4 @@
-import { Category } from "~/server/db/schema";
+import { type Category } from "~/server/db/schema";
 import { Card, CardHeader, CardTitle, CardDescription } from "./ui/card";
 
 export default async function CategoriesList({

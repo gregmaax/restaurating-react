@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SVGProps } from "react";
+import { type SVGProps } from "react";
 import {
   NavigationMenu,
   NavigationMenuLink,
