@@ -50,8 +50,8 @@ export default function CategoryForm({
     setError("");
     setSuccess("");
 
-    startTransition(() => {
-      createCategory(values).then((data) => {
+    startTransition(async () => {
+      await createCategory(values).then((data) => {
         if (data.error) {
           setError(data.error);
           toast.error(data.error);
