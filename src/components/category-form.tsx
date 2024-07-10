@@ -16,39 +16,53 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Textarea } from "./ui/textarea";
+import { CategorySchema } from "~/schemas";
+import { createCategory } from "~/actions/category-actions";
+import { useState, useTransition } from "react";
+import { toast } from "sonner";
 
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Le nom doit contenir au moins 2 caractères.",
-    })
-    .max(30, {
-      message: "Le nom doit contenir 30 caractères maximum.",
-    }),
-  description: z
-    .string()
-    .max(256, {
-      message: "La description doit contenir 256 caractères maximum.",
-    })
-    .optional(),
-});
+export default function CategoryForm({
+  onSuccess,
+}: {
+  onSuccess: (success: boolean) => void;
+}) {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
-export default function CategoryForm() {
   //form definition
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof CategorySchema>>({
+    resolver: zodResolver(CategorySchema),
     defaultValues: {
       name: "",
       description: "",
     },
   });
 
+  //passing prop up to close the dialog
+  function sendSubmitSuccessUp() {
+    const success = true;
+    onSuccess(success);
+  }
+
   //what happens on submit
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  function onSubmit(values: z.infer<typeof CategorySchema>) {
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      createCategory(values).then((data) => {
+        if (data.error) {
+          setError(data.error);
+          toast.error(data.error);
+        }
+        if (data.success) {
+          setSuccess(data.success);
+          toast.success(data.success);
+          sendSubmitSuccessUp();
+        }
+      });
+    });
   }
   return (
     <div>
@@ -61,7 +75,7 @@ export default function CategoryForm() {
               <FormItem>
                 <FormLabel>Nom</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isPending} />
                 </FormControl>
                 <FormDescription>
                   Entrez le nom de votre catégorie.
@@ -80,13 +94,16 @@ export default function CategoryForm() {
                   <Textarea
                     placeholder="Entrez une description..."
                     {...field}
+                    disabled={isPending}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Enregistrer</Button>
+          <Button type="submit" disabled={isPending}>
+            Enregistrer
+          </Button>
         </form>
       </Form>
     </div>

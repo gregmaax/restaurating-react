@@ -2,6 +2,7 @@ import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import Header from "~/components/shared/header";
+import { Toaster } from "~/components/ui/sonner";
 
 export const metadata = {
   title: "Restaurating",
@@ -19,6 +20,7 @@ export default function RootLayout({
       <body>
         <Header />
         {children}
+        <Toaster />
       </body>
     </html>
   );

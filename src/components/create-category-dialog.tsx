@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import CategoryForm from "./category-form";
 import { Button } from "./ui/button";
 import {
@@ -10,8 +13,14 @@ import {
 } from "./ui/dialog";
 
 export function CreateCategoryDialog() {
+  const [open, setOpen] = useState(false);
+
+  //handle the prop
+  function handleSuccess() {
+    setOpen(false);
+  }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default">Nouvelle catégorie</Button>
       </DialogTrigger>
@@ -22,7 +31,7 @@ export function CreateCategoryDialog() {
             Modale de création de catégorie.
           </DialogDescription>
         </DialogHeader>
-        <CategoryForm />
+        <CategoryForm onSuccess={handleSuccess} />
       </DialogContent>
     </Dialog>
   );
