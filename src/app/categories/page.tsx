@@ -4,7 +4,7 @@ import { db } from "~/server/db";
 
 export const dynamic = "force-dynamic";
 
-export default async function HomePage() {
+export default async function Categories() {
   const categories = await db.query.categories.findMany();
   return (
     <main className="container p-10">
