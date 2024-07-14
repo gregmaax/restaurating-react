@@ -1,5 +1,3 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-
 import Link from "next/link";
 import { type SVGProps } from "react";
 import {
@@ -33,14 +31,7 @@ export default function Header() {
       </div>
 
       <div className="ml-auto flex gap-2">
-        <SignedOut>
-          <SignInButton>
-            <Button>Connexion</Button>
-          </SignInButton>
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        <Button>Connexion</Button>
       </div>
     </header>
   );
@@ -59,26 +50,24 @@ function DesktopNav() {
             Accueil
           </Link>
         </NavigationMenuLink>
-        <SignedIn>
-          <NavigationMenuLink asChild>
-            <Link
-              href="/categories"
-              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-              prefetch={false}
-            >
-              Categories
-            </Link>
-          </NavigationMenuLink>
-          <NavigationMenuLink asChild>
-            <Link
-              href=""
-              className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-              prefetch={false}
-            >
-              Restaurants
-            </Link>
-          </NavigationMenuLink>
-        </SignedIn>
+        <NavigationMenuLink asChild>
+          <Link
+            href="/categories"
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+            prefetch={false}
+          >
+            Categories
+          </Link>
+        </NavigationMenuLink>
+        <NavigationMenuLink asChild>
+          <Link
+            href=""
+            className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+            prefetch={false}
+          >
+            Restaurants
+          </Link>
+        </NavigationMenuLink>
       </NavigationMenuList>
     </NavigationMenu>
   );
@@ -112,22 +101,20 @@ function MobileNav() {
           >
             Accueil
           </Link>
-          <SignedIn>
-            <Link
-              href="/categories"
-              className="flex w-full items-center py-2 text-lg font-semibold"
-              prefetch={false}
-            >
-              Categories
-            </Link>
-            <Link
-              href="#"
-              className="flex w-full items-center py-2 text-lg font-semibold"
-              prefetch={false}
-            >
-              Restaurants
-            </Link>
-          </SignedIn>
+          <Link
+            href="/categories"
+            className="flex w-full items-center py-2 text-lg font-semibold"
+            prefetch={false}
+          >
+            Categories
+          </Link>
+          <Link
+            href="#"
+            className="flex w-full items-center py-2 text-lg font-semibold"
+            prefetch={false}
+          >
+            Restaurants
+          </Link>
         </div>
       </SheetContent>
     </Sheet>
