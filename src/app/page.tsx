@@ -1,4 +1,5 @@
 import { Poppins } from "next/font/google";
+import LoginButton from "~/components/auth/login-button";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
@@ -17,13 +18,15 @@ export default function HomePage() {
             font.className,
           )}
         >
-          Restaurating
+          🍽️ Restaurating
         </h1>
         <p>Gardez trace et notez vos restaurants.</p>
         <div>
-          <Button variant={"secondary"} size={"lg"}>
-            Connexion
-          </Button>
+          <LoginButton>
+            <Button variant={"secondary"} size={"lg"}>
+              Connexion
+            </Button>
+          </LoginButton>
         </div>
       </div>
     </main>
