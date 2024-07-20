@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 
 import { z } from "zod";
 import {
@@ -14,8 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Textarea } from "./ui/textarea";
+} from "../ui/form";
+import { Textarea } from "../ui/textarea";
 import { CategorySchema } from "~/schemas";
 import { createCategory } from "~/actions/category-actions";
 import { useState, useTransition } from "react";

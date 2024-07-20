@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import CategoryForm from "./category-form";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "../ui/dialog";
 
 export function CreateCategoryDialog() {
   const [open, setOpen] = useState(false);

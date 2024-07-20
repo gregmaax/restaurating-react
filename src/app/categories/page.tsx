@@ -1,5 +1,5 @@
-import CategoriesList from "~/components/categories-list";
-import { CreateCategoryDialog } from "~/components/create-category-dialog";
+import CategoriesList from "~/components/categories/categories-list";
+import { CreateCategoryDialog } from "~/components/categories/create-category-dialog";
 import { db } from "~/server/db";
 
 export const dynamic = "force-dynamic";

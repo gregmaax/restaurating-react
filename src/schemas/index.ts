@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const LoginSchema = z.object({
-  email: z.string().email(),
-  password: z.string(),
+  email: z.string().email({ message: "Entrez un email valide." }),
+  password: z.string().min(1, { message: "Un mot de passe est requis." }),
 });
 
 export const CategorySchema = z.object({

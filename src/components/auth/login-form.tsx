@@ -11,10 +11,20 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "~/components/ui/form";
-import { Input } from "../ui/input";
+import { Input } from "~/components/ui/input";
+import { Button } from "~/components/ui/button";
+import FormError from "~/components/form-error";
+import FormSuccess from "~/components/form-success";
+import { login } from "~/actions/login";
+import { useState, useTransition } from "react";
 
 export default function LoginForm() {
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -22,6 +32,18 @@ export default function LoginForm() {
       password: "",
     },
   });
+
+  function onSubmit(values: z.infer<typeof LoginSchema>) {
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      login(values).then((data) => {
+        setError(data.error);
+        setSuccess(data.success);
+      });
+    });
+  }
   return (
     <CardWrapper
       headerLabel="Bienvenue"
@@ -30,7 +52,7 @@ export default function LoginForm() {
       showSocial
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(() => {})} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-x-4">
             <FormField
               control={form.control}
@@ -43,12 +65,39 @@ export default function LoginForm() {
                       {...field}
                       placeholder="john.doe@example.com"
                       type="email"
+                      disabled={isPending}
                     />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+          <div>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mot de passe</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="******"
+                      type="password"
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
+          <Button className="w-full" type="submit" disabled={isPending}>
+            Connexion
+          </Button>
         </form>
       </Form>
     </CardWrapper>
