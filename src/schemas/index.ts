@@ -5,6 +5,14 @@ export const LoginSchema = z.object({
   password: z.string().min(1, { message: "Un mot de passe est requis." }),
 });
 
+export const RegisterSchema = z.object({
+  email: z.string().email({ message: "Entrez un email valide." }),
+  password: z
+    .string()
+    .min(6, { message: "Le mot de passe doit contenir au moins 6 caractères" }),
+  name: z.string().min(1, { message: "Un nom d'utilisateur est requis." }),
+});
+
 export const CategorySchema = z.object({
   name: z
     .string()

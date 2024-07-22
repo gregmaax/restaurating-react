@@ -14,7 +14,7 @@ export default function Header({ label }: HeaderProps) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4">
       <h1 className={cn("text-3xl font-semibold", font.className)}>
-        Connexion
+        🔐 Identifiez-vous
       </h1>
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>
