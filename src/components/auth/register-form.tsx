@@ -57,7 +57,7 @@ export default function RegisterForm() {
           <div className="space-x-4">
             <FormField
               control={form.control}
-              name="email"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nom d'utilisateur</FormLabel>
@@ -117,7 +117,7 @@ export default function RegisterForm() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button className="w-full" type="submit" disabled={isPending}>
-            Connexion
+            Créer un compte
           </Button>
         </form>
       </Form>
