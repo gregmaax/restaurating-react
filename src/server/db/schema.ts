@@ -5,6 +5,8 @@ import { sql } from "drizzle-orm";
 import {
   boolean,
   integer,
+  pgEnum,
+  PgEnumColumn,
   pgTableCreator,
   primaryKey,
   text,
@@ -13,6 +15,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import type { AdapterAccountType } from "next-auth/adapters";
+import { UserRole } from "~/interfaces/user-role";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -36,6 +39,8 @@ export const categories = createTable("category", {
 export type Category = typeof categories.$inferSelect;
 
 //AUTH
+export const userRoleEnum = pgEnum("user_role", ["ADMIN", "USER"]);
+
 export const users = createTable("user", {
   id: text("id")
     .primaryKey()
@@ -45,6 +50,7 @@ export const users = createTable("user", {
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
   password: text("password"),
+  role: userRoleEnum("role").notNull().default("USER"),
 });
 
 export const accounts = createTable(
@@ -70,3 +76,6 @@ export const accounts = createTable(
     }),
   }),
 );
+function EnumColumn<T>(arg0: string, UserRole: any) {
+  throw new Error("Function not implemented.");
+}
