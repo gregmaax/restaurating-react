@@ -11,6 +11,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
+    "@typescript-eslint/prefer-optional-chain": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "no-empty-function": "off",
     "@typescript-eslint/no-empty-function": "error",

@@ -60,7 +60,7 @@ export default function RegisterForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nom d'utilisateur</FormLabel>
+                  <FormLabel>Nom d&apos;utilisateur</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
