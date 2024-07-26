@@ -48,7 +48,7 @@ export default function LoginForm() {
       login(values).then((data) => {
         if (data) {
           setError(data.error);
-          //TODO: success with 2FA
+          setSuccess(data.success);
         }
       });
     });

@@ -7,6 +7,8 @@ import { db } from "~/server/db";
 import { RegisterSchema } from "~/schemas";
 import { users } from "~/server/db/schema";
 import { getUserByEmail } from "~/server/queries/users";
+import { generateVerificationToken } from "~/lib/token";
+import { sendVerificationEmail } from "~/lib/mail";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -28,9 +30,16 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     .insert(users)
     .values({ email: email, name: name, password: hashedPassword });
 
-  //TODO: Send verification token
+  const verificationToken = await generateVerificationToken(email);
+  //if (verificationToken.length > 0) {
+  //  possibly check the length before sending the email to check the object
+  //}
+  await sendVerificationEmail(
+    verificationToken[0]?.email!,
+    verificationToken[0]?.token!,
+  );
 
   return {
-    success: "Compte crée !",
+    success: "Email de vérification envoyé !",
   };
 };

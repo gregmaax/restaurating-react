@@ -2,6 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { sql } from "drizzle-orm";
+import { datetime } from "drizzle-orm/mysql-core";
 import {
   boolean,
   integer,
@@ -11,6 +12,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -72,5 +74,21 @@ export const accounts = createTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
+  }),
+);
+
+export const verification_tokens = createTable(
+  "verification_token",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    email: text("email").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("emailVerified", { mode: "date" }).notNull(),
+  },
+  (verification_token) => ({
+    uniqueEmailToken: uniqueIndex("unique_email_token").on(
+      verification_token.email,
+      verification_token.token,
+    ),
   }),
 );
