@@ -21,7 +21,7 @@ import type { AdapterAccountType } from "next-auth/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `restaurating_${name}`);
+export const createTable = pgTableCreator((name) => `${name}`);
 
 export const categories = createTable("category", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),

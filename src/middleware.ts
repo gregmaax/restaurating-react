@@ -1,4 +1,3 @@
-import authConfig from "~/auth.config";
 import NextAuth, { Session } from "next-auth";
 import {
   apiAuthPrefix,
@@ -7,6 +6,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
 } from "~/routes";
 import { NextRequest, NextResponse } from "next/server";
+import authConfig from "~/auth.config";
 
 const { auth } = NextAuth(authConfig);
 
