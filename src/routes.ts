@@ -9,7 +9,7 @@ export const publicRoutes = ["/"];
  * Redirection vers /settings si loggedIn
  * @type {string[]}
  */
-export const authRoutes = ["/auth/login", "/auth/register"];
+export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
 
 /**
  * API authentication routes
