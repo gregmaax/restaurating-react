@@ -13,6 +13,14 @@ export const RegisterSchema = z.object({
   name: z.string().min(1, { message: "Un nom d'utilisateur est requis." }),
 });
 
+export const ResetSchema = z.object({
+  email: z.string().email({ message: "Entrez un email valide." }),
+});
+
+export const NewPasswordSchema = z.object({
+  password: z.string().min(6, { message: "6 caractères minimum." }),
+});
+
 export const CategorySchema = z.object({
   name: z
     .string()

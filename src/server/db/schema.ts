@@ -92,3 +92,19 @@ export const verification_tokens = createTable(
     ),
   }),
 );
+
+export const password_reset_tokens = createTable(
+  "password_reset_token",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    email: text("email").notNull(),
+    token: text("token").notNull(),
+    expires: timestamp("emailVerified", { mode: "date" }).notNull(),
+  },
+  (password_reset_token) => ({
+    uniqueEmailToken: uniqueIndex("unique_pw_reset_token").on(
+      password_reset_token.email,
+      password_reset_token.token,
+    ),
+  }),
+);

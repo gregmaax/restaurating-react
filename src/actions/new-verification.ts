@@ -36,7 +36,5 @@ export async function newVerification(token: string) {
     .delete(verification_tokens)
     .where(eq(verification_tokens.id, existingToken.id));
 
-  console.log("Enter New Verification function success");
-
   return { success: "Email vérifié !" };
 }
