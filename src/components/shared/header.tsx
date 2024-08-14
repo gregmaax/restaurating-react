@@ -14,8 +14,11 @@ import {
   SheetTrigger,
 } from "../ui/sheet";
 import { Button } from "../ui/button";
+import { UserButton } from "../auth/user-button";
+import { auth } from "~/auth";
 
-export default function Header() {
+export default async function Header() {
+  const session = await auth();
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-20">
       <div className="flex flex-row gap-2">
@@ -30,9 +33,11 @@ export default function Header() {
         <MobileNav />
       </div>
 
-      <div className="ml-auto flex gap-2">
-        <Button>Connexion</Button>
-      </div>
+      {session?.user ? (
+        <div className="ml-auto flex gap-2">
+          <UserButton />
+        </div>
+      ) : null}
     </header>
   );
 }
