@@ -1,5 +1,39 @@
 import { z } from "zod";
 
+export const SettingsSchema = z
+  .object({
+    name: z.optional(z.string()),
+    email: z.optional(z.string().email()),
+    password: z.optional(z.string().min(6)),
+    newPassword: z.optional(z.string().min(6)),
+  })
+  .refine(
+    (data) => {
+      if (data.password && !data.newPassword) {
+        return false;
+      }
+
+      return true;
+    },
+    {
+      message: "Le nouveau mot de passe est requis",
+      path: ["newPassword"],
+    },
+  )
+  .refine(
+    (data) => {
+      if (data.newPassword && !data.password) {
+        return false;
+      }
+
+      return true;
+    },
+    {
+      message: "Le mot de passe est requis",
+      path: ["password"],
+    },
+  );
+
 export const LoginSchema = z.object({
   email: z.string().email({ message: "Entrez un email valide." }),
   password: z.string().min(1, { message: "Un mot de passe est requis." }),

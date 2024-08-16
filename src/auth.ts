@@ -6,6 +6,7 @@ import { getUserById } from "./server/queries/users";
 import authConfig from "~/auth.config";
 import { users } from "./server/db/schema";
 import { eq } from "drizzle-orm";
+import { getAccountByUserId } from "./server/queries/account";
 
 export const {
   handlers: { GET, POST },
@@ -46,6 +47,11 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role as "ADMIN" | "USER";
       }
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email!;
+        session.user.isOAuth = token.isOAuth as boolean;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -56,6 +62,11 @@ export const {
 
       if (!existingUser) return token;
 
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.isOAuth = !!existingAccount;
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
 
       return token;

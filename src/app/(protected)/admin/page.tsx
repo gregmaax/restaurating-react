@@ -7,6 +7,8 @@ import FormSuccess from "~/components/form-success";
 import { Button } from "~/components/ui/button";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 
+export const dynamic = "force-dynamic";
+
 export default function AdminPage() {
   const onServerActionClick = () => {
     admin().then((data) => {
