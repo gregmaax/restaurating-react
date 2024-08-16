@@ -16,9 +16,10 @@ import {
 import { Button } from "../ui/button";
 import { UserButton } from "../auth/user-button";
 import { auth } from "~/auth";
+import { currentUser } from "~/lib/auth";
 
 export default async function Header() {
-  const session = await auth();
+  const user = await currentUser();
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-20">
       <div className="flex flex-row gap-2">
@@ -33,7 +34,7 @@ export default async function Header() {
         <MobileNav />
       </div>
 
-      {session?.user ? (
+      {user ? (
         <div className="ml-auto flex gap-2">
           <UserButton />
         </div>

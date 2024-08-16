@@ -24,7 +24,6 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="fr" className={`${GeistSans.variable} flex flex-col gap-4`}>
         <body className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
-          <Header />
           {children}
           <Toaster />
         </body>
