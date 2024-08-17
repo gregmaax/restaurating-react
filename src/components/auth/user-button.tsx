@@ -19,7 +19,7 @@ export function UserButton() {
     <DropdownMenu>
       <DropdownMenuTrigger className="focus:outline-none">
         <Avatar>
-          <AvatarImage src={user?.image || ""} />
+          <AvatarImage src={user?.image ?? ""} />
           <AvatarFallback>
             <FaUser />
           </AvatarFallback>

@@ -112,7 +112,7 @@ export default function LoginForm() {
               )}
             />
           </div>
-          <FormError message={error || urlError} />
+          <FormError message={error ?? urlError} />
           <FormSuccess message={success} />
           <Button className="w-full" type="submit" disabled={isPending}>
             Connexion

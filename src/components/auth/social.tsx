@@ -14,7 +14,7 @@ export default function Social() {
 
   function onClick(provider: "google" | "github") {
     signIn(provider, {
-      callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+      callbackUrl: callbackUrl ?? DEFAULT_LOGIN_REDIRECT,
     });
   }
 

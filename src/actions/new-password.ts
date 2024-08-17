@@ -48,7 +48,7 @@ export async function newPassword(
   await db
     .update(users)
     .set({ password: hashedPassword })
-    .where(eq(users.id, existingUser?.id!));
+    .where(eq(users.id, existingUser?.id));
 
   await db
     .delete(password_reset_tokens)
