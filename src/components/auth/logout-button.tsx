@@ -1,15 +1,18 @@
 "use client";
 
 import { logout } from "~/actions/logout";
-import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface LogoutButtonProps {
   children?: React.ReactNode;
 }
 
 export function LogoutButton({ children }: LogoutButtonProps) {
+  const router = useRouter();
   const onClick = () => {
-    logout();
+    logout().then(() => {
+      router.push("/auth/login");
+    });
   };
 
   return (

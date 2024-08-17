@@ -22,7 +22,7 @@ export default function HomePage() {
         </h1>
         <p>Gardez trace et notez vos restaurants.</p>
         <div>
-          <LoginButton>
+          <LoginButton mode="modal" asChild>
             <Button variant={"secondary"} size={"lg"}>
               Connexion
             </Button>
