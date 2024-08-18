@@ -1,8 +1,8 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import LoginForm from "./complete-auth-flow/login-form";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/dialog";
+import LoginForm from "./login-form";
 
 interface LoginButtonProps {
   children: React.ReactNode;

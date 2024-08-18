@@ -19,7 +19,6 @@ import FormError from "~/components/form-error";
 import FormSuccess from "~/components/form-success";
 import { reset } from "~/actions/reset";
 import { useState, useTransition } from "react";
-import Link from "next/link";
 
 export default function ResetForm() {
   const [isPending, startTransition] = useTransition();
