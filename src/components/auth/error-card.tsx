@@ -9,7 +9,7 @@ export default function ErrorCard() {
         <Header label="Oups, erreur inattendue !" />
       </CardHeader>
       <CardFooter>
-        <BackButton label="Retour à la page de connexion" href="/auth/login" />
+        <BackButton label="Retour à la page de connexion" href="/auth/signin" />
       </CardFooter>
     </Card>
   );

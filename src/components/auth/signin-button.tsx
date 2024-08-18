@@ -2,9 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
-import LoginForm from "./login-form";
+import SignIn from "./signin";
 
-interface LoginButtonProps {
+interface SigninButtonProps {
   children: React.ReactNode;
   mode?: "modal" | "redirect";
   asChild?: boolean;
@@ -14,10 +14,10 @@ export default function LoginButton({
   children,
   mode = "redirect",
   asChild,
-}: LoginButtonProps) {
+}: SigninButtonProps) {
   const router = useRouter();
   const onClick = () => {
-    router.push("/auth/login");
+    router.push("/auth/signin");
   };
 
   if (mode === "modal") {
@@ -25,7 +25,7 @@ export default function LoginButton({
       <Dialog>
         <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
         <DialogContent className="w-auto border-none bg-transparent p-0">
-          <LoginForm />
+          <SignIn />
         </DialogContent>
       </Dialog>
     );
