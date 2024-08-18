@@ -11,7 +11,7 @@ export function LogoutButton({ children }: LogoutButtonProps) {
   const router = useRouter();
   const onClick = () => {
     logout().then(() => {
-      router.push("/auth/login");
+      router.push("/auth/signin");
     });
   };
 

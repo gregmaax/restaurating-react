@@ -2,20 +2,14 @@
  * Routes publiques
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/auth/new-verification"];
+export const publicRoutes = ["/"];
 
 /**
  * Routes protégées par l'auth
  * Redirection vers /settings si loggedIn
  * @type {string[]}
  */
-export const authRoutes = [
-  "/auth/login",
-  "/auth/register",
-  "/auth/error",
-  "/auth/reset",
-  "/auth/new-password",
-];
+export const authRoutes = ["/auth/signin", "/auth/error"];
 
 /**
  * API authentication routes
