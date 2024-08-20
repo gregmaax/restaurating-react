@@ -7,7 +7,9 @@ export default function CategoryDetailsPage({
 }) {
   return (
     <div className="container flex flex-col gap-10">
-      <div>Détails catégorie id : {params.categoryId}</div>
+      <div className="flex flex-col gap-2">
+        <span>Détails catégorie id : {params.categoryId}</span>
+      </div>
       <div>Liste de restaurants</div>
     </div>
   );

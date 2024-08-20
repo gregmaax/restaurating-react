@@ -47,21 +47,21 @@ export default function CategoryForm({
 
   //what happens on submit
   function onSubmit(values: z.infer<typeof CategorySchema>) {
-    // setError("");
-    // setSuccess("");
-    // startTransition(async () => {
-    //   await createCategory(values).then((data) => {
-    //     if (data.error) {
-    //       setError(data.error);
-    //       toast.error(data.error);
-    //     }
-    //     if (data.success) {
-    //       setSuccess(data.success);
-    //       toast.success(data.success);
-    //       sendSubmitSuccessUp();
-    //     }
-    //   });
-    // });
+    setError("");
+    setSuccess("");
+    startTransition(async () => {
+      await createCategory(values).then((data) => {
+        if (data.error) {
+          setError(data.error);
+          toast.error(data.error);
+        }
+        if (data.success) {
+          setSuccess(data.success);
+          toast.success(data.success);
+          sendSubmitSuccessUp();
+        }
+      });
+    });
   }
   return (
     <div>

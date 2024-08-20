@@ -18,6 +18,7 @@ export const createCategory = async (
   await db.insert(categories).values({
     name: values.name,
     description: values.description,
+    userId: "user1",
   });
 
   revalidatePath("/");
