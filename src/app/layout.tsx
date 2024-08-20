@@ -22,9 +22,9 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="fr" className={`${GeistSans.variable} flex flex-col gap-4`}>
-        <body>
-          {children}
+      <html lang="fr" className={`${GeistSans.variable}`}>
+        <body className="overflow-hidden">
+          <main className="flex h-full w-full flex-col gap-4">{children}</main>
           <Toaster />
         </body>
       </html>
