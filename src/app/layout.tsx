@@ -10,7 +10,7 @@ import { Toaster } from "~/components/ui/sonner";
 export const metadata = {
   title: "Restaurating",
   description: "Next.js playground for a restaurant app",
-  icons: [{ rel: "icon", url: "./favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
 export default async function RootLayout({
