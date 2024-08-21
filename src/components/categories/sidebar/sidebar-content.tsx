@@ -17,7 +17,7 @@ export default function SidebarContent({
         <div>
           {categories.length === 0 ? <p>Aucune catégorie ajoutée</p> : null}
           {categories.map((category) => (
-            <>
+            <div key={category.id}>
               <div className="cursor-pointer">
                 <Link href={`/categories/${category.id}`}>
                   <span className="text-sm">{category.name}</span>
@@ -25,7 +25,7 @@ export default function SidebarContent({
               </div>
 
               <Separator className="my-2" />
-            </>
+            </div>
           ))}
         </div>
       </div>

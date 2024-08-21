@@ -20,6 +20,7 @@ import { CategorySchema } from "~/schemas";
 import { createCategory } from "~/actions/category-actions";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import FormError from "../form-error";
 
 export default function CategoryForm({
   onSuccess,
@@ -100,6 +101,7 @@ export default function CategoryForm({
               </FormItem>
             )}
           />
+          <FormError message={error} />
           <Button type="submit" disabled={isPending}>
             Enregistrer
           </Button>
