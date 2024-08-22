@@ -1,5 +1,8 @@
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
+import { categories } from "../db/schema";
+import { redirect } from "next/navigation";
+import { and, eq } from "drizzle-orm";
 
 export const getAllCategories = async () => {
   const categories = await db.query.categories.findMany();
@@ -32,4 +35,15 @@ export const getCategoryById = async (id: string) => {
   if (category.userId !== user.id) throw new Error("Unauthorized");
 
   return category;
+};
+
+export const deleteCategoryById = async (categoryId: string) => {
+  const user = await currentUser();
+  if (!user?.id) throw new Error("Unauthorized");
+
+  await db
+    .delete(categories)
+    .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)));
+
+  //redirect("/categories");
 };

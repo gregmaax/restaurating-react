@@ -6,6 +6,7 @@ import { auth } from "~/auth";
 import { CategorySchema } from "~/schemas";
 import { db } from "~/server/db";
 import { categories } from "~/server/db/schema";
+import { deleteCategoryById } from "~/server/queries/categories";
 
 export const createCategory = async (
   values: z.infer<typeof CategorySchema>,
@@ -33,4 +34,17 @@ export const createCategory = async (
   revalidatePath("/");
 
   return { success: "Votre catégorie a bien été enregistrée !" };
+};
+
+export const deleteCategory = async (categoryId: string) => {
+  //check if there is a loggedin user
+  const session = await auth();
+
+  if (!session || !session.user) {
+    return { error: "Vous devez être connecté pour effectuer cette action !" };
+  }
+
+  await deleteCategoryById(categoryId);
+
+  return { success: "Votre catégorie a été supprimée !" };
 };
