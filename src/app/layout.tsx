@@ -4,7 +4,6 @@ import { SessionProvider } from "next-auth/react";
 import { auth } from "~/auth";
 
 import { GeistSans } from "geist/font/sans";
-import Header from "~/components/shared/header";
 import { Toaster } from "~/components/ui/sonner";
 
 export const metadata = {

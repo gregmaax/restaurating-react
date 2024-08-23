@@ -7,7 +7,7 @@ interface HomeLayoutProps {
 
 export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
-    <div className="flex items-start justify-between">
+    <div className="flex">
       <SidebarDeux />
       {children}
     </div>
