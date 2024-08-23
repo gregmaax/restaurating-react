@@ -1,6 +1,5 @@
 "use server";
 
-import { error } from "console";
 import { AuthError } from "next-auth";
 import { z } from "zod";
 import { signIn } from "~/auth";

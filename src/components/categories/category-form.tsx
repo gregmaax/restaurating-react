@@ -20,6 +20,7 @@ import { CategorySchema } from "~/schemas";
 import { createCategory } from "~/actions/category-actions";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import FormError from "../form-error";
 
 export default function CategoryForm({
   onSuccess,
@@ -47,21 +48,21 @@ export default function CategoryForm({
 
   //what happens on submit
   function onSubmit(values: z.infer<typeof CategorySchema>) {
-    // setError("");
-    // setSuccess("");
-    // startTransition(async () => {
-    //   await createCategory(values).then((data) => {
-    //     if (data.error) {
-    //       setError(data.error);
-    //       toast.error(data.error);
-    //     }
-    //     if (data.success) {
-    //       setSuccess(data.success);
-    //       toast.success(data.success);
-    //       sendSubmitSuccessUp();
-    //     }
-    //   });
-    // });
+    setError("");
+    setSuccess("");
+    startTransition(async () => {
+      await createCategory(values).then((data) => {
+        if (data.error) {
+          setError(data.error);
+          toast.error(data.error);
+        }
+        if (data.success) {
+          setSuccess(data.success);
+          toast.success(data.success);
+          sendSubmitSuccessUp();
+        }
+      });
+    });
   }
   return (
     <div>
@@ -100,6 +101,7 @@ export default function CategoryForm({
               </FormItem>
             )}
           />
+          <FormError message={error} />
           <Button type="submit" disabled={isPending}>
             Enregistrer
           </Button>

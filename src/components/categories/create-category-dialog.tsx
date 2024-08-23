@@ -11,6 +11,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import { FaPlus } from "react-icons/fa";
 
 export function CreateCategoryDialog() {
   const [open, setOpen] = useState(false);
@@ -22,7 +23,9 @@ export function CreateCategoryDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Nouvelle catégorie</Button>
+        <Button variant="default" className="w-full">
+          <FaPlus className="mr-2" /> Nouvelle catégorie
+        </Button>
       </DialogTrigger>
       <DialogContent className="w-11/12 rounded sm:max-w-md">
         <DialogHeader>

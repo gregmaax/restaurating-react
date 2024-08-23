@@ -15,23 +15,17 @@ import {
 } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { UserButton } from "../auth/user-button";
-import { auth } from "~/auth";
 import { currentUser } from "~/lib/auth";
 
 export default async function Header() {
   const user = await currentUser();
   return (
-    <header className="flex h-20 w-full shrink-0 items-center border-b-[1px] border-black px-4 md:px-20">
+    <header className="flex h-16 w-full shrink-0 items-center border-b px-4 md:px-20">
       <div className="flex flex-row gap-2">
         <Link href="/" className="mr-6 hidden lg:flex" prefetch={false}>
           <MountainIcon className="h-6 w-6" />
           <span>Gnitaruatser</span>
         </Link>
-      </div>
-
-      <div>
-        <DesktopNav />
-        <MobileNav />
       </div>
 
       {user ? (

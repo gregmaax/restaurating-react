@@ -1,17 +1,16 @@
-import CategoriesList from "~/components/categories/categories-list";
-import { CreateCategoryDialog } from "~/components/categories/create-category-dialog";
-import { db } from "~/server/db";
-
 export const dynamic = "force-dynamic";
 
-export default async function Categories() {
-  const categories = await db.query.categories.findMany();
+export default function CategoryPage() {
   return (
-    <main className="container p-10">
-      <div className="my-4">
-        <CreateCategoryDialog />
-      </div>
-      <CategoriesList categories={categories} />
-    </main>
+    <div className="flex w-full justify-center p-4 text-center">
+      <h1
+        className={`px-4 text-center text-xl font-bold text-gray-800`}
+        style={{
+          textShadow: "2px 2px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+        Aucune catégorie sélectionnée.
+      </h1>
+    </div>
   );
 }

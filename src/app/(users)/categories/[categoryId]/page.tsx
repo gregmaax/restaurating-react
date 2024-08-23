@@ -1,7 +1,19 @@
-export default async function CategoryDetails({
+import { getCategoryById } from "~/server/queries/categories";
+import CategoryDetails from "~/components/categories/category-details";
+
+export const dynamic = "force-dynamic";
+
+export default async function CategoryDetailsPage({
   params,
 }: {
   params: { categoryId: string };
 }) {
-  return <div>Detail de la catégorie id : {params.categoryId}</div>;
+  const category = await getCategoryById(params.categoryId);
+  return (
+    <CategoryDetails
+      name={category.name}
+      description={category.description}
+      categoryId={params.categoryId}
+    />
+  );
 }

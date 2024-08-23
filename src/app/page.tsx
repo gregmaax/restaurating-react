@@ -14,7 +14,7 @@ export default function HomePage() {
       <div className="space-y-6 text-center">
         <h1
           className={cn(
-            "text-6xl font-semibold text-white drop-shadow-md",
+            "text-6xl font-semibold text-slate-500 drop-shadow-md",
             font.className,
           )}
         >

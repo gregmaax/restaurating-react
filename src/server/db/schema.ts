@@ -2,12 +2,9 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { sql } from "drizzle-orm";
-import { datetime } from "drizzle-orm/mysql-core";
 import {
-  boolean,
   integer,
   pgEnum,
-  PgEnumColumn,
   pgTableCreator,
   primaryKey,
   text,
