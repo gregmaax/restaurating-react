@@ -68,7 +68,9 @@ export default function DeleteCategoryDialog({
           <Button variant="outline" onClick={handleCancel}>
             Non
           </Button>
-          <Button onClick={handleConfirm}>Oui</Button>
+          <Button onClick={handleConfirm} disabled={isPending}>
+            Oui
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

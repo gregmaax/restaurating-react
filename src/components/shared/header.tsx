@@ -15,7 +15,6 @@ import {
 } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { UserButton } from "../auth/user-button";
-import { auth } from "~/auth";
 import { currentUser } from "~/lib/auth";
 
 export default async function Header() {

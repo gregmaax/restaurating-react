@@ -1,7 +1,6 @@
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
 import { categories } from "../db/schema";
-import { redirect } from "next/navigation";
 import { and, eq } from "drizzle-orm";
 
 export const getAllCategories = async () => {
