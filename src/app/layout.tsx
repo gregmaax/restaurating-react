@@ -23,7 +23,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="fr" className={`${GeistSans.variable}`}>
         <body>
-          <main className="flex h-full w-full flex-col gap-4">{children}</main>
+          <main>{children}</main>
           <Toaster />
         </body>
       </html>

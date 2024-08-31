@@ -46,5 +46,7 @@ export const deleteCategory = async (categoryId: string) => {
 
   await deleteCategoryById(categoryId);
 
+  revalidatePath("/categories");
+
   return { success: "Votre catégorie a été supprimée !" };
 };

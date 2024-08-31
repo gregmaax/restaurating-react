@@ -10,10 +10,12 @@ export default async function CategoryDetailsPage({
 }) {
   const category = await getCategoryById(params.categoryId);
   return (
-    <CategoryDetails
-      name={category.name}
-      description={category.description}
-      categoryId={params.categoryId}
-    />
+    <div className="flex-1 overflow-y-auto">
+      <CategoryDetails
+        name={category.name}
+        description={category.description}
+        categoryId={params.categoryId}
+      />
+    </div>
   );
 }

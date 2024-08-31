@@ -24,7 +24,7 @@ export default function CategoryDetails({
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-              12 restaurants
+              3 restaurants
             </span>
             <div className="flex flex-wrap gap-2">
               <Button size="sm" variant="outline">

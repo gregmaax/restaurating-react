@@ -8,8 +8,8 @@ import { CreateCategoryDialog } from "../create-category-dialog";
 export default async function SidebarDeux() {
   const categories = await getSpecificUserCategories();
   return (
-    <div className="bottom-0 left-0 top-0 w-80 overflow-hidden border-r bg-background">
-      <div className="flex min-h-screen flex-col">
+    <div className="bottom-0 left-0 top-0 w-72 border-r bg-background">
+      <div className="h-full overflow-y-auto">
         <div className="border-b p-4">
           <CreateCategoryDialog />
         </div>
