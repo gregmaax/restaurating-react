@@ -1,6 +1,7 @@
 import { Button } from "~/components/ui/button";
 import { Pencil } from "lucide-react";
 import DeleteCategoryDialog from "./delete-category-dialog";
+import RestaurantList from "../restaurants/restaurants-list";
 
 export default function CategoryDetails({
   categoryId,
@@ -35,7 +36,9 @@ export default function CategoryDetails({
           </div>
         </div>
       </div>
-      <div>Contenu : Liste de restaurants</div>
+      <div>
+        <RestaurantList />
+      </div>
     </div>
   );
 }
