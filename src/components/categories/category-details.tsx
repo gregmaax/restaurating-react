@@ -1,9 +1,11 @@
 import { Button } from "~/components/ui/button";
-import { Pencil } from "lucide-react";
+import { Pencil, PlusCircle } from "lucide-react";
 import DeleteCategoryDialog from "./delete-category-dialog";
 import RestaurantList from "../restaurants/restaurants-list";
+import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog";
+import { getAllRestaurantsByCategoryId } from "~/server/queries/restaurants";
 
-export default function CategoryDetails({
+export default async function CategoryDetails({
   categoryId,
   name,
   description,
@@ -12,6 +14,7 @@ export default function CategoryDetails({
   name: string;
   description: string | null;
 }) {
+  const restaurants = await getAllRestaurantsByCategoryId(categoryId);
   return (
     <div className="container mx-auto flex flex-col">
       <div className="w-full px-4 py-6 md:px-6">
@@ -27,6 +30,7 @@ export default function CategoryDetails({
               3 restaurants
             </span>
             <div className="flex flex-wrap gap-2">
+              <CreateRestaurantDialog categoryId={categoryId} />
               <Button size="sm" variant="outline">
                 <Pencil className="mr-2 h-4 w-4" />
                 Modifier
@@ -37,7 +41,7 @@ export default function CategoryDetails({
         </div>
       </div>
       <div>
-        <RestaurantList />
+        <RestaurantList restaurants={restaurants} />
       </div>
     </div>
   );

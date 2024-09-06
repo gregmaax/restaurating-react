@@ -35,6 +35,21 @@ export const categories = createTable("category", {
 
 export type Category = typeof categories.$inferSelect;
 
+export const restaurants = createTable("restaurant", {
+  id: uuid("id").primaryKey().defaultRandom().notNull(),
+  city: varchar("city", { length: 45 }).notNull(),
+  name: varchar("name", { length: 30 }).notNull(),
+  description: varchar("description", { length: 256 }),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updatedAt", { withTimezone: true }),
+  categoryId: varchar("categoryId", { length: 256 }),
+  userId: varchar("userId", { length: 256 }),
+});
+
+export type Restaurant = typeof restaurants.$inferSelect;
+
 //AUTH
 export const userRoleEnum = pgEnum("user_role", ["ADMIN", "USER"]);
 

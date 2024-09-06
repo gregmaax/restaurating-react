@@ -10,7 +10,7 @@ const font = Poppins({
 
 export default function HomePage() {
   return (
-    <main className="flex h-full flex-col items-center justify-center">
+    <main className="flex h-screen items-center justify-center">
       <div className="space-y-6 text-center">
         <h1
           className={cn(
@@ -23,7 +23,7 @@ export default function HomePage() {
         <p>Gardez trace et notez vos restaurants.</p>
         <div>
           <SigninButton mode="modal" asChild>
-            <Button variant={"secondary"} size={"lg"}>
+            <Button variant="secondary" size="lg">
               Connexion
             </Button>
           </SigninButton>
