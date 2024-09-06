@@ -30,9 +30,13 @@ export default async function RestaurantList({
           className="flex flex-col overflow-hidden transition-shadow hover:shadow-md"
         >
           <CardHeader className="space-y-2 p-4 pb-2">
-            <div className="flex items-center text-xs text-muted-foreground">
-              <MapPinIcon className="mr-1 h-3 w-3" />
-              <span className="truncate">{restaurant.city}</span>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <div className="flex">
+                <MapPinIcon className="mr-1 h-3 w-3" />
+                <span className="truncate">{restaurant.city}</span>
+              </div>
+
+              <StarRating rating={4} />
             </div>
             <div className="flex items-center justify-between">
               <CardTitle className="line-clamp-1 flex-grow text-lg">
@@ -54,7 +58,6 @@ export default async function RestaurantList({
             <p className="mb-2 line-clamp-2 text-sm text-muted-foreground">
               {restaurant.description}
             </p>
-            <StarRating rating={4} />
           </CardContent>
           <CardFooter className="flex items-center justify-between p-2 pt-0">
             <div className="flex items-center text-xs text-muted-foreground">

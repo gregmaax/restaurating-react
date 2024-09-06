@@ -15,6 +15,7 @@ export default async function CategoryDetails({
   description: string | null;
 }) {
   const restaurants = await getAllRestaurantsByCategoryId(categoryId);
+  const restaurantsCount = restaurants.length;
   return (
     <div className="container mx-auto flex flex-col">
       <div className="w-full px-4 py-6 md:px-6">
@@ -27,7 +28,8 @@ export default async function CategoryDetails({
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-              3 restaurants
+              {restaurantsCount}{" "}
+              {restaurantsCount === 1 ? "restaurant" : "restaurants"}
             </span>
             <div className="flex flex-wrap gap-2">
               <CreateRestaurantDialog categoryId={categoryId} />
