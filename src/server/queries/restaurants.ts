@@ -2,7 +2,6 @@ import { currentUser } from "~/lib/auth";
 import { db } from "../db";
 import { restaurants } from "../db/schema";
 import { and, eq } from "drizzle-orm";
-import useRestaurantStore from "~/stores/restaurant-store";
 
 export const getAllRestaurantsByCategoryId = async (categoryId: string) => {
   const user = await currentUser();
