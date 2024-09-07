@@ -35,8 +35,6 @@ export default async function RestaurantList({
                 <MapPinIcon className="mr-1 h-3 w-3" />
                 <span className="truncate">{restaurant.city}</span>
               </div>
-
-              <StarRating rating={4} />
             </div>
             <div className="flex items-center justify-between">
               <CardTitle className="line-clamp-1 flex-grow text-lg">
@@ -56,10 +54,12 @@ export default async function RestaurantList({
           </CardHeader>
           <CardContent className="flex-grow p-4 pb-2 pt-0">
             <p className="mb-2 line-clamp-2 text-sm text-muted-foreground">
-              {restaurant.description}
+              {restaurant.description
+                ? restaurant.description
+                : "Aucune description ajoutée"}
             </p>
           </CardContent>
-          <CardFooter className="flex items-center justify-between p-2 pt-0">
+          <CardFooter className="flex items-center justify-between px-4 py-2 pt-0">
             <div className="flex items-center text-xs text-muted-foreground">
               <CalendarIcon className="mr-1 h-3 w-3" />
               <span>Ajouté le {restaurant.createdAt.toLocaleDateString()}</span>
