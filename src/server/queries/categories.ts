@@ -43,6 +43,4 @@ export const deleteCategoryById = async (categoryId: string) => {
   await db
     .delete(categories)
     .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)));
-
-  //redirect("/categories");
 };

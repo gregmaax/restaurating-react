@@ -6,6 +6,7 @@ import { auth } from "~/auth";
 import { RestaurantSchema } from "~/schemas";
 import { db } from "~/server/db";
 import { restaurants } from "~/server/db/schema";
+import { deleteRestaurantById } from "~/server/queries/restaurants";
 
 export const createRestaurant = async (
   values: z.infer<typeof RestaurantSchema>,
@@ -29,10 +30,28 @@ export const createRestaurant = async (
     name: values.name,
     description: values.description,
     categoryId: values.categoryId,
-    userId: session.user.id,
+    userId: session.user.id!,
   });
 
   revalidatePath(`/categories/${values.categoryId}`);
 
   return { success: "Votre restaurant a bien été ajouté !" };
+};
+
+export const deleteRestaurant = async (
+  restaurantId: string,
+  categoryId: string,
+) => {
+  //check if there is a loggedin user
+  const session = await auth();
+
+  if (!session || !session.user) {
+    return { error: "Vous devez être connecté pour effectuer cette action !" };
+  }
+
+  await deleteRestaurantById(restaurantId);
+
+  revalidatePath(`/categories/${categoryId}`);
+
+  return { success: "Votre restaurant a été supprimé !" };
 };

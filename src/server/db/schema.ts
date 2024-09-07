@@ -30,7 +30,7 @@ export const categories = createTable("category", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  userId: varchar("userId", { length: 256 }),
+  userId: varchar("userId", { length: 256 }).notNull(),
 });
 
 export type Category = typeof categories.$inferSelect;
@@ -44,8 +44,8 @@ export const restaurants = createTable("restaurant", {
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
   updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  categoryId: varchar("categoryId", { length: 256 }),
-  userId: varchar("userId", { length: 256 }),
+  categoryId: varchar("categoryId", { length: 256 }).notNull(),
+  userId: varchar("userId", { length: 256 }).notNull(),
 });
 
 export type Restaurant = typeof restaurants.$inferSelect;

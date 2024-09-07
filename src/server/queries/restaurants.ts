@@ -1,5 +1,7 @@
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
+import { restaurants } from "../db/schema";
+import { and, eq } from "drizzle-orm";
 
 export const getAllRestaurantsByCategoryId = async (categoryId: string) => {
   const user = await currentUser();
@@ -28,4 +30,15 @@ export const getRestaurantById = async (id: string) => {
   if (restaurant.userId !== user.id) throw new Error("Unauthorized");
 
   return restaurant;
+};
+
+export const deleteRestaurantById = async (restaurantId: string) => {
+  const user = await currentUser();
+  if (!user?.id) throw new Error("Unauthorized");
+
+  await db
+    .delete(restaurants)
+    .where(
+      and(eq(restaurants.id, restaurantId), eq(restaurants.userId, user.id)),
+    );
 };

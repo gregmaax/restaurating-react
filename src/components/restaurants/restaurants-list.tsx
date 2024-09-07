@@ -16,6 +16,7 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Restaurant } from "~/server/db/schema";
+import DeleteRestaurantDialog from "./delete-restaurant-dialog";
 
 export default async function RestaurantList({
   restaurants,
@@ -73,14 +74,10 @@ export default async function RestaurantList({
               >
                 <PencilIcon className="h-3 w-3" />
               </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                aria-label={`Delete ${restaurant.id}`}
-                className="h-7 px-2"
-              >
-                <TrashIcon className="h-3 w-3" />
-              </Button>
+              <DeleteRestaurantDialog
+                restaurantId={restaurant.id}
+                categoryId={restaurant.categoryId}
+              />
             </div>
           </CardFooter>
         </Card>
