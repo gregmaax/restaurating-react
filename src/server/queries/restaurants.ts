@@ -17,6 +17,20 @@ export const getAllRestaurantsByCategoryId = async (categoryId: string) => {
   return restaurants;
 };
 
+export const getRestaurantCountOfCategory = async (categoryId: string) => {
+  const user = await currentUser();
+  if (!user?.id) throw new Error("Unauthorized");
+
+  //return only the restaurants that matches the loggedIn userId and the categoryId
+  const restaurants = await db.query.restaurants.findMany({
+    where: (model, { eq, and }) =>
+      and(eq(model.categoryId, categoryId), eq(model.userId, user.id!)),
+    orderBy: (model, { desc }) => desc(model.createdAt),
+  });
+
+  return restaurants.length;
+};
+
 export const getRestaurantById = async (id: string) => {
   const user = await currentUser();
   if (!user?.id) throw new Error("Unauthorized");

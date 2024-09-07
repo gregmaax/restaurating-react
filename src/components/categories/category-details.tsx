@@ -4,6 +4,7 @@ import DeleteCategoryDialog from "./delete-category-dialog";
 import RestaurantList from "../restaurants/restaurants-list";
 import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog";
 import { getAllRestaurantsByCategoryId } from "~/server/queries/restaurants";
+import RestaurantCounter from "../restaurants/restaurant-counter";
 
 export default async function CategoryDetails({
   categoryId,
@@ -15,7 +16,8 @@ export default async function CategoryDetails({
   description: string | null;
 }) {
   const restaurants = await getAllRestaurantsByCategoryId(categoryId);
-  const restaurantsCount = restaurants.length;
+  const restaurantCount = restaurants.length;
+
   return (
     <div className="container mx-auto flex flex-col">
       <div className="w-full px-4 py-6 md:px-6">
@@ -27,10 +29,10 @@ export default async function CategoryDetails({
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20">
-              {restaurantsCount}{" "}
-              {restaurantsCount === 1 ? "restaurant" : "restaurants"}
-            </span>
+            <RestaurantCounter
+              isInSidebar={false}
+              categoryIdOrCount={restaurantCount}
+            />
             <div className="flex flex-wrap gap-2">
               <CreateRestaurantDialog categoryId={categoryId} />
               <Button size="sm" variant="outline">

@@ -3,9 +3,10 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 
 import { getSpecificUserCategories } from "~/server/queries/categories";
 import Link from "next/link";
-import { CreateCategoryDialog } from "../create-category-dialog";
+import { CreateCategoryDialog } from "../categories/create-category-dialog";
+import RestaurantCounter from "~/components/restaurants/restaurant-counter";
 
-export default async function SidebarDeux() {
+export default async function Sidebar() {
   const categories = await getSpecificUserCategories();
   return (
     <div className="bottom-0 left-0 top-0 w-72 border-r bg-background">
@@ -16,13 +17,21 @@ export default async function SidebarDeux() {
         <ScrollArea className="flex-1 p-4">
           <h3 className="mb-4 text-sm font-semibold">Catégories</h3>
           <div className="space-y-2">
+            {categories.length === 0 ? <p>Aucune catégorie ajoutée</p> : null}
             {categories.map((category) => (
               <Button
                 key={category.id}
                 variant="ghost"
-                className="w-full justify-start"
+                className="w-full justify-between"
+                asChild
               >
-                <Link href={`/categories/${category.id}`}>{category.name}</Link>
+                <Link href={`/categories/${category.id}`}>
+                  <span className="flex-grow text-left">{category.name}</span>
+                  <RestaurantCounter
+                    categoryIdOrCount={category.id}
+                    isInSidebar={true}
+                  />
+                </Link>
               </Button>
             ))}
           </div>

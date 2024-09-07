@@ -16,12 +16,17 @@ import {
 } from "~/components/ui/card";
 import { Restaurant } from "~/server/db/schema";
 import DeleteRestaurantDialog from "./delete-restaurant-dialog";
+import MessageDisplay from "../shared/message-display";
 
 export default async function RestaurantList({
   restaurants,
 }: {
   restaurants: Restaurant[];
 }) {
+  if (restaurants.length === 0) {
+    return <div className="p-14 text-center">Aucun restaurant ajouté</div>;
+  }
+
   return (
     <div className="grid gap-4 p-3 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {restaurants.map((restaurant) => (
