@@ -31,7 +31,7 @@ export function CreateRestaurantDialog({ categoryId }: { categoryId: string }) {
         <DialogHeader>
           <DialogTitle>Ajouter un restaurant</DialogTitle>
           <DialogDescription className="hidden">
-            Modale d'ajout de restaurant.
+            Modale d&apos;ajout de restaurant.
           </DialogDescription>
         </DialogHeader>
         <RestaurantForm onSuccess={handleSuccess} categoryId={categoryId} />

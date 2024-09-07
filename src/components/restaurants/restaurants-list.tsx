@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   CalendarIcon,
-  TrashIcon,
   Star,
   StarHalf,
   PencilIcon,
@@ -86,22 +85,27 @@ export default async function RestaurantList({
   );
 }
 
-const StarRating = ({ rating }: { rating: number }) => {
+interface StarRatingProps {
+  rating: number;
+}
+
+function StarRating({ rating }: StarRatingProps) {
   const fullStars = Math.floor(rating);
   const hasHalfStar = rating % 1 !== 0;
+  const emptyStars = 5 - Math.ceil(rating);
 
   return (
     <div
       className="flex items-center"
-      aria-label={`Rating: ${rating} out of 5 stars`}
+      aria-label={`Rating: ${rating.toFixed(1)} out of 5 stars`}
     >
-      {[...Array(fullStars)].map((_, i) => (
+      {Array.from({ length: fullStars }, (_, i) => (
         <Star key={`full-${i}`} className="h-3 w-3 fill-primary text-primary" />
       ))}
       {hasHalfStar && (
         <StarHalf className="h-3 w-3 fill-primary text-primary" />
       )}
-      {[...Array(5 - Math.ceil(rating))].map((_, i) => (
+      {Array.from({ length: emptyStars }, (_, i) => (
         <Star key={`empty-${i}`} className="h-3 w-3 text-muted-foreground" />
       ))}
       <span className="ml-1 text-xs text-muted-foreground">
@@ -109,4 +113,4 @@ const StarRating = ({ rating }: { rating: number }) => {
       </span>
     </div>
   );
-};
+}
