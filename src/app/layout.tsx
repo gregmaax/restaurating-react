@@ -22,8 +22,8 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="fr" className={`${GeistSans.variable}`}>
-        <body className="overflow-hidden">
-          <main className="flex h-full w-full flex-col gap-4">{children}</main>
+        <body>
+          <main>{children}</main>
           <Toaster />
         </body>
       </html>

@@ -6,7 +6,7 @@ interface ForUsersLayoutProps {
 
 export default function ForUsersLayout({ children }: ForUsersLayoutProps) {
   return (
-    <div>
+    <div className="flex h-screen flex-col">
       <Header />
       {children}
     </div>
