@@ -28,10 +28,10 @@ export const createCategory = async (
   await db.insert(categories).values({
     name: values.name,
     description: values.description,
-    userId: session.user.id,
+    userId: session.user.id!,
   });
 
-  revalidatePath("/");
+  revalidatePath("/categories");
 
   return { success: "Votre catégorie a bien été enregistrée !" };
 };
