@@ -40,6 +40,9 @@ export default async function RestaurantList({
                 <MapPinIcon className="mr-1 h-3 w-3" />
                 <span className="truncate">{restaurant.city}</span>
               </div>
+              {restaurant.rating ? (
+                <StarRating rating={restaurant.rating} />
+              ) : null}
             </div>
             <div className="flex items-center justify-between">
               <CardTitle className="line-clamp-1 flex-grow text-lg">
@@ -113,9 +116,6 @@ function StarRating({ rating }: StarRatingProps) {
       {Array.from({ length: emptyStars }, (_, i) => (
         <Star key={`empty-${i}`} className="h-3 w-3 text-muted-foreground" />
       ))}
-      <span className="ml-1 text-xs text-muted-foreground">
-        {rating.toFixed(1)}
-      </span>
     </div>
   );
 }

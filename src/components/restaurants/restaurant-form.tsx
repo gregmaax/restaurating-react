@@ -14,7 +14,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
+} from "~/components/ui/form";
+import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { RestaurantSchema } from "~/schemas";
 import { createRestaurant } from "~/actions/restaurant-actions";
@@ -40,6 +41,7 @@ export default function RestaurantForm({
       city: "",
       name: "",
       description: "",
+      rating: undefined,
       categoryId: categoryId,
     },
   });
@@ -113,6 +115,46 @@ export default function RestaurantForm({
                     {...field}
                     disabled={isPending}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="rating"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Note</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex space-x-2"
+                    disabled={isPending}
+                  >
+                    {[1, 2, 3, 4, 5].map((rating) => (
+                      <FormItem key={rating}>
+                        <FormControl>
+                          <RadioGroupItem
+                            value={rating.toString()}
+                            className="sr-only"
+                            id={`rating-${rating}`}
+                          />
+                        </FormControl>
+                        <FormLabel
+                          htmlFor={`rating-${rating}`}
+                          className={`flex h-10 w-10 items-center justify-center rounded-sm border ${
+                            field.value === rating.toString()
+                              ? "border-primary bg-primary text-primary-foreground"
+                              : "border-input bg-background hover:bg-muted/80"
+                          } cursor-pointer transition-colors`}
+                        >
+                          {rating}
+                        </FormLabel>
+                      </FormItem>
+                    ))}
+                  </RadioGroup>
                 </FormControl>
                 <FormMessage />
               </FormItem>

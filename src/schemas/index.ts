@@ -88,5 +88,6 @@ export const RestaurantSchema = z.object({
     })
     .optional(),
   city: z.string().min(1, { message: "La ville est requise" }),
+  rating: z.enum(["1", "2", "3", "4", "5"]).optional(),
   categoryId: z.string(),
 });
