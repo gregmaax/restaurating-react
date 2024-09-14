@@ -29,6 +29,7 @@ export const createRestaurant = async (
     city: values.city,
     name: values.name,
     description: values.description,
+    rating: values.rating == undefined ? null : Number(values.rating),
     categoryId: values.categoryId,
     userId: session.user.id!,
   });
