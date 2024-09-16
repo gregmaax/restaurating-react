@@ -18,31 +18,40 @@ import {
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { RestaurantSchema } from "~/schemas";
-import { createRestaurant } from "~/actions/restaurant-actions";
+import {
+  createRestaurant,
+  updateRestaurant,
+} from "~/actions/restaurant-actions";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import FormError from "../form-error";
+import { Restaurant } from "~/server/db/schema";
 
 export default function RestaurantForm({
   onSuccess,
   categoryId,
+  restaurant,
 }: {
   onSuccess: (success: boolean) => void;
   categoryId: string;
+  restaurant?: Restaurant;
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
+  const isUpdating = !!restaurant;
+
   //form definition
   const form = useForm<z.infer<typeof RestaurantSchema>>({
     resolver: zodResolver(RestaurantSchema),
     defaultValues: {
-      city: "",
-      name: "",
-      description: "",
-      rating: undefined,
-      categoryId: categoryId,
+      id: restaurant?.id! ?? "",
+      city: restaurant?.city ?? "",
+      name: restaurant?.name ?? "",
+      description: restaurant?.description! ?? "",
+      rating: restaurant?.rating ?? undefined,
+      categoryId: restaurant?.categoryId ?? categoryId,
     },
   });
 
@@ -54,20 +63,29 @@ export default function RestaurantForm({
 
   //what happens on submit
   function onSubmit(values: z.infer<typeof RestaurantSchema>) {
+    console.log("Form submitted with values:", values); // Debug log
     setError("");
     setSuccess("");
     startTransition(async () => {
-      await createRestaurant(values).then((data) => {
-        if (data.error) {
-          setError(data.error);
-          toast.error(data.error);
-        }
-        if (data.success) {
-          setSuccess(data.success);
-          toast.success(data.success);
+      const action = isUpdating ? updateRestaurant : createRestaurant;
+      const actionName = isUpdating ? "modifié" : "ajouté";
+
+      try {
+        const result = await action(values);
+        console.log("Action result:", result); // Debug log
+        if (result.error) {
+          setError(result.error);
+          toast.error(result.error);
+        } else if (result.success) {
+          setSuccess(result.success);
+          toast.success(`Votre restaurant a bien été ${actionName} !`);
           sendSubmitSuccessUp();
         }
-      });
+      } catch (err) {
+        console.error("Error in form submission:", err); // Debug log
+        setError("An unexpected error occurred");
+        toast.error("An unexpected error occurred");
+      }
     });
   }
   return (
@@ -97,7 +115,7 @@ export default function RestaurantForm({
                   <Input {...field} disabled={isPending} />
                 </FormControl>
                 <FormDescription>
-                  Entrez le nom de votre catégorie.
+                  Entrez le nom de votre restaurant.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -128,8 +146,10 @@ export default function RestaurantForm({
                 <FormLabel>Note</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(value) =>
+                      field.onChange(parseInt(value, 10))
+                    }
+                    value={field.value?.toString()}
                     className="flex space-x-2"
                     disabled={isPending}
                   >
@@ -145,7 +165,7 @@ export default function RestaurantForm({
                         <FormLabel
                           htmlFor={`rating-${rating}`}
                           className={`flex h-10 w-10 items-center justify-center rounded-sm border ${
-                            field.value === rating.toString()
+                            field.value === rating
                               ? "border-primary bg-primary text-primary-foreground"
                               : "border-input bg-background hover:bg-muted/80"
                           } cursor-pointer transition-colors`}
@@ -162,7 +182,7 @@ export default function RestaurantForm({
           />
           <FormError message={error} />
           <Button type="submit" disabled={isPending}>
-            Enregistrer
+            {!isUpdating ? "Enregistrer" : "Modifier"}
           </Button>
         </form>
       </Form>
