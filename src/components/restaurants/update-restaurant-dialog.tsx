@@ -46,7 +46,6 @@ export function UpdateRestaurantDialog({
           </DialogDescription>
         </DialogHeader>
         <RestaurantForm
-          update={true}
           onSuccess={handleSuccess}
           categoryId={restaurant.categoryId}
           restaurant={restaurant}
