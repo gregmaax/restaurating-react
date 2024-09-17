@@ -5,17 +5,19 @@ import RestaurantList from "../restaurants/restaurants-list";
 import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog";
 import { getAllRestaurantsByCategoryId } from "~/server/queries/restaurants";
 import RestaurantCounter from "../restaurants/restaurant-counter";
+import { UpdateCategoryDialog } from "./update-category-dialog";
+import { Category } from "~/server/db/schema";
 
 export default async function CategoryDetails({
-  categoryId,
+  category,
   name,
   description,
 }: {
-  categoryId: string;
+  category: Category;
   name: string;
   description: string | null;
 }) {
-  const restaurants = await getAllRestaurantsByCategoryId(categoryId);
+  const restaurants = await getAllRestaurantsByCategoryId(category.id);
   const restaurantCount = restaurants.length;
 
   return (
@@ -34,12 +36,9 @@ export default async function CategoryDetails({
               categoryIdOrCount={restaurantCount}
             />
             <div className="flex flex-wrap gap-2">
-              <CreateRestaurantDialog categoryId={categoryId} />
-              <Button size="sm" variant="outline">
-                <Pencil className="mr-2 h-4 w-4" />
-                Modifier
-              </Button>
-              <DeleteCategoryDialog categoryId={categoryId} />
+              <CreateRestaurantDialog categoryId={category.id} />
+              <UpdateCategoryDialog category={category} />
+              <DeleteCategoryDialog categoryId={category.id} />
             </div>
           </div>
         </div>

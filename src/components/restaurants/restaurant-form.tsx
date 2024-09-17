@@ -72,7 +72,6 @@ export default function RestaurantForm({
 
       try {
         const result = await action(values);
-        console.log("Action result:", result); // Debug log
         if (result.error) {
           setError(result.error);
           toast.error(result.error);
@@ -82,9 +81,8 @@ export default function RestaurantForm({
           sendSubmitSuccessUp();
         }
       } catch (err) {
-        console.error("Error in form submission:", err); // Debug log
-        setError("An unexpected error occurred");
-        toast.error("An unexpected error occurred");
+        setError("Erreur inattendue");
+        toast.error("Erreur inattendue");
       }
     });
   }

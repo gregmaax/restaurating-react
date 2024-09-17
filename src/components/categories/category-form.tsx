@@ -17,26 +17,32 @@ import {
 } from "../ui/form";
 import { Textarea } from "../ui/textarea";
 import { CategorySchema } from "~/schemas";
-import { createCategory } from "~/actions/category-actions";
+import { createCategory, updateCategory } from "~/actions/category-actions";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import FormError from "../form-error";
+import { Category } from "~/server/db/schema";
 
 export default function CategoryForm({
   onSuccess,
+  category,
 }: {
   onSuccess: (success: boolean) => void;
+  category?: Category;
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
+  const isUpdating = !!category;
+
   //form definition
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      name: "",
-      description: "",
+      id: category?.id! ?? "",
+      name: category?.name ?? "",
+      description: category?.description ?? "",
     },
   });
 
@@ -51,17 +57,23 @@ export default function CategoryForm({
     setError("");
     setSuccess("");
     startTransition(async () => {
-      await createCategory(values).then((data) => {
-        if (data.error) {
-          setError(data.error);
-          toast.error(data.error);
-        }
-        if (data.success) {
-          setSuccess(data.success);
-          toast.success(data.success);
+      const action = isUpdating ? updateCategory : createCategory;
+      const actionName = isUpdating ? "modifiée" : "ajoutée";
+
+      try {
+        const result = await action(values);
+        if (result.error) {
+          setError(result.error);
+          toast.error(result.error);
+        } else if (result.success) {
+          setSuccess(result.success);
+          toast.success(`Votre catégorie a bien été ${actionName} !`);
           sendSubmitSuccessUp();
         }
-      });
+      } catch (err) {
+        setError("Erreur inattendue");
+        toast.error("Erreur inattendue");
+      }
     });
   }
   return (
@@ -103,7 +115,7 @@ export default function CategoryForm({
           />
           <FormError message={error} />
           <Button type="submit" disabled={isPending}>
-            Enregistrer
+            {!isUpdating ? "Enregistrer" : "Modifier"}
           </Button>
         </form>
       </Form>

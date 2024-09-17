@@ -74,7 +74,7 @@ export const updateRestaurant = async (
 
   revalidatePath(`/categories/${values.categoryId}`);
 
-  return { success: "Votre restaurant a bien été ajouté !" };
+  return { success: "Votre restaurant a bien été modifié !" };
 };
 
 export const deleteRestaurant = async (

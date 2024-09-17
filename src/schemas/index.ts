@@ -56,6 +56,7 @@ export const NewPasswordSchema = z.object({
 });
 
 export const CategorySchema = z.object({
+  id: z.string().optional(),
   name: z
     .string()
     .min(2, {
