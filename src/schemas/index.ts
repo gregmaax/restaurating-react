@@ -56,6 +56,7 @@ export const NewPasswordSchema = z.object({
 });
 
 export const CategorySchema = z.object({
+  id: z.string().optional(),
   name: z
     .string()
     .min(2, {
@@ -73,6 +74,7 @@ export const CategorySchema = z.object({
 });
 
 export const RestaurantSchema = z.object({
+  id: z.string().optional(),
   name: z
     .string()
     .min(2, {
@@ -88,6 +90,6 @@ export const RestaurantSchema = z.object({
     })
     .optional(),
   city: z.string().min(1, { message: "La ville est requise" }),
-  rating: z.enum(["1", "2", "3", "4", "5"]).optional(),
+  rating: z.number().int().min(1).max(5).optional(),
   categoryId: z.string(),
 });

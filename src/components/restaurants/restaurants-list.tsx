@@ -17,6 +17,7 @@ import {
 import { Restaurant } from "~/server/db/schema";
 import DeleteRestaurantDialog from "./delete-restaurant-dialog";
 import MessageDisplay from "../shared/message-display";
+import { UpdateRestaurantDialog } from "./update-restaurant-dialog";
 
 export default async function RestaurantList({
   restaurants,
@@ -73,14 +74,7 @@ export default async function RestaurantList({
               <span>Ajouté le {restaurant.createdAt.toLocaleDateString()}</span>
             </div>
             <div className="flex gap-1">
-              <Button
-                variant="outline"
-                size="sm"
-                aria-label={`Edit ${restaurant.id}`}
-                className="h-7 px-2"
-              >
-                <PencilIcon className="h-3 w-3" />
-              </Button>
+              <UpdateRestaurantDialog restaurant={restaurant} />
               <DeleteRestaurantDialog
                 restaurantId={restaurant.id}
                 categoryId={restaurant.categoryId}

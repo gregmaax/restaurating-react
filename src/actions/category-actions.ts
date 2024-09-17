@@ -1,5 +1,6 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { auth } from "~/auth";
@@ -34,6 +35,37 @@ export const createCategory = async (
   revalidatePath("/categories");
 
   return { success: "Votre catégorie a bien été enregistrée !" };
+};
+
+export const updateCategory = async (
+  values: z.infer<typeof CategorySchema>,
+) => {
+  //check if there is a loggedin user
+  const session = await auth();
+
+  if (!session || !session.user) {
+    return { error: "Vous devez être connecté pour effectuer cette action !" };
+  }
+
+  //action
+  const validatedFields = CategorySchema.safeParse(values);
+
+  if (!validatedFields.success) {
+    return { error: "Erreur ! Champs invalides" };
+  }
+
+  await db
+    .update(categories)
+    .set({
+      name: values.name,
+      description: values.description,
+      updatedAt: new Date(),
+    })
+    .where(eq(categories.id, values.id!));
+
+  revalidatePath(`/categories/${values.id}`);
+
+  return { success: "Votre catégorie a bien été modifiée !" };
 };
 
 export const deleteCategory = async (categoryId: string) => {
