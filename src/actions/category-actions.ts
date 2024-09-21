@@ -8,6 +8,7 @@ import { CategorySchema } from "~/schemas";
 import { db } from "~/server/db";
 import { categories } from "~/server/db/schema";
 import { deleteCategoryById } from "~/server/queries/categories";
+import { capitalize, slugify } from "~/utils/string-utils";
 
 export const createCategory = async (
   values: z.infer<typeof CategorySchema>,
@@ -19,15 +20,26 @@ export const createCategory = async (
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
 
-  //action
+  //validate fields using zod schemas
   const validatedFields = CategorySchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: "Erreur ! Champs invalides" };
   }
 
+  // Check if the category with the same name already exists
+  const existingCategory = await db.query.categories.findFirst({
+    where: (model, { eq }) => eq(model.name, capitalize(values.name)),
+  });
+
+  if (existingCategory) {
+    return { error: "Une catégorie avec ce nom existe déjà !" };
+  }
+
+  //insert the new category
   await db.insert(categories).values({
-    name: values.name,
+    name: capitalize(values.name),
+    slug: slugify(values.name),
     description: values.description,
     userId: session.user.id!,
   });

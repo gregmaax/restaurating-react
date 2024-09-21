@@ -5,6 +5,7 @@ import { getSpecificUserCategories } from "~/server/queries/categories";
 import Link from "next/link";
 import { CreateCategoryDialog } from "../categories/create-category-dialog";
 import RestaurantCounter from "~/components/restaurants/restaurant-counter";
+import { slugify } from "~/utils/string-utils";
 
 export default async function Sidebar() {
   const categories = await getSpecificUserCategories();
@@ -25,7 +26,7 @@ export default async function Sidebar() {
                 className="w-full justify-between"
                 asChild
               >
-                <Link href={`/categories/${category.id}`}>
+                <Link href={`/categories/${slugify(category.slug)}`}>
                   <span className="flex-grow text-left">{category.name}</span>
                   <RestaurantCounter
                     categoryIdOrCount={category.id}
