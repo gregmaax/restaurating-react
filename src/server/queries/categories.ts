@@ -36,6 +36,21 @@ export const getCategoryById = async (id: string) => {
   return category;
 };
 
+export const getCategoryBySlug = async (slug: string) => {
+  const user = await currentUser();
+  if (!user?.id) throw new Error("Unauthorized");
+
+  const category = await db.query.categories.findFirst({
+    where: (model, { eq }) => eq(model.slug, slug),
+  });
+
+  if (!category) throw new Error("Category not found");
+
+  if (category.userId !== user.id) throw new Error("Unauthorized");
+
+  return category;
+};
+
 export const deleteCategoryById = async (categoryId: string) => {
   const user = await currentUser();
   if (!user?.id) throw new Error("Unauthorized");

@@ -26,6 +26,7 @@ export const createTable = pgTableCreator((name) => `${name}`);
 export const categories = createTable("category", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
   name: varchar("name", { length: 30 }).notNull(),
+  slug: varchar("slug", { length: 30 }).notNull(),
   description: varchar("description", { length: 256 }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
