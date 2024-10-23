@@ -11,11 +11,7 @@ export default async function CategoryDetailsPage({
   const category = await getCategoryBySlug(params.categorySlug);
   return (
     <div className="flex-1 overflow-y-auto">
-      <CategoryDetails
-        name={category.name}
-        description={category.description}
-        category={category}
-      />
+      <CategoryDetails category={category} />
     </div>
   );
 }

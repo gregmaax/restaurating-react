@@ -1,5 +1,3 @@
-import { Button } from "~/components/ui/button";
-import { Pencil, PlusCircle } from "lucide-react";
 import DeleteCategoryDialog from "./delete-category-dialog";
 import RestaurantList from "../restaurants/restaurants-list";
 import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog";
@@ -10,12 +8,8 @@ import { Category } from "~/server/db/schema";
 
 export default async function CategoryDetails({
   category,
-  name,
-  description,
 }: {
   category: Category;
-  name: string;
-  description: string | null;
 }) {
   const restaurants = await getAllRestaurantsByCategoryId(category.id);
   const restaurantCount = restaurants.length;
@@ -25,9 +19,13 @@ export default async function CategoryDetails({
       <div className="w-full px-4 py-6 md:px-6">
         <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight">{name}</h2>
+            <h2 className="text-2xl font-bold tracking-tight">
+              {category.name}
+            </h2>
             <p className="text-sm text-muted-foreground">
-              {description ? description : "Aucune description"}
+              {category.description
+                ? category.description
+                : "Aucune description"}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">

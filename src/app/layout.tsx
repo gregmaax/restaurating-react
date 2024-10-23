@@ -24,7 +24,7 @@ export default async function RootLayout({
       <html lang="fr" className={`${GeistSans.variable}`}>
         <body>
           <main>{children}</main>
-          <Toaster />
+          <Toaster richColors />
         </body>
       </html>
     </SessionProvider>

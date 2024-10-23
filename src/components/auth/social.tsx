@@ -32,7 +32,7 @@ export default function Social() {
       </Button>
       <Button
         size={"lg"}
-        className="w-full"
+        className="hidden w-full"
         variant={"outline"}
         onClick={() => {
           signIn("github");
