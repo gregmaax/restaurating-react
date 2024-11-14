@@ -23,7 +23,7 @@ export function CreateCategoryDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" className="w-full">
+        <Button variant="custom_primary" className="w-full">
           <FaPlus className="mr-2" /> Nouvelle catégorie
         </Button>
       </DialogTrigger>

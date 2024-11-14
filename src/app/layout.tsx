@@ -21,7 +21,7 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="fr" className={`${GeistSans.variable}`}>
+      <html lang="fr" className={`${GeistSans.variable} bg-panda-light-yellow`}>
         <body>
           <main>{children}</main>
           <Toaster richColors />

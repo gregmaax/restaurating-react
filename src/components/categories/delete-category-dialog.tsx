@@ -52,7 +52,7 @@ export default function DeleteCategoryDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
+        <Button size="sm" variant="default">
           <Trash2 className="mr-2 h-4 w-4" />
           Supprimer
         </Button>
@@ -65,10 +65,14 @@ export default function DeleteCategoryDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant="default" onClick={handleCancel}>
             Non
           </Button>
-          <Button onClick={handleConfirm} disabled={isPending}>
+          <Button
+            onClick={handleConfirm}
+            disabled={isPending}
+            variant="custom_primary"
+          >
             Oui
           </Button>
         </DialogFooter>

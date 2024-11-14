@@ -114,7 +114,7 @@ export default function CategoryForm({
             )}
           />
           <FormError message={error} />
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" disabled={isPending} variant="custom_primary">
             {!isUpdating ? "Enregistrer" : "Modifier"}
           </Button>
         </form>

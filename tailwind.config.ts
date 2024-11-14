@@ -19,6 +19,9 @@ const config = {
     },
     extend: {
       colors: {
+        "panda-light-yellow": "#FDFCEF",
+        "panda-mid-yellow": "#F6E458",
+        "panda-strong-yellow": "#FDE047",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

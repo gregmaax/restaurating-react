@@ -1,4 +1,4 @@
-export default async function RestaurantCounter({
+export default function RestaurantCounter({
   count,
   isInSidebar,
 }: {

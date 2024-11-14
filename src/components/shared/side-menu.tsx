@@ -5,6 +5,7 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
+  SidebarGroupAction,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -29,6 +30,7 @@ import Link from "next/link";
 
 import type { Category } from "~/server/db/schema";
 import { User } from "next-auth";
+import { Plus } from "lucide-react";
 
 export function SideMenu({
   categories,
@@ -38,13 +40,16 @@ export function SideMenu({
   user: (User & { role: "ADMIN" | "USER"; isOAuth: boolean }) | undefined;
 }) {
   return (
-    <Sidebar>
+    <Sidebar variant="floating">
       <SidebarHeader>
         <CreateCategoryDialog />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Catégories</SidebarGroupLabel>
+          <SidebarGroupAction title="Ajouter une catégorie">
+            <Plus /> <span className="sr-only">Ajouter une catégorie</span>
+          </SidebarGroupAction>
           <SidebarGroupContent>
             <SidebarMenu>
               {categories.length === 0 ? <p>Aucune catégorie ajoutée</p> : null}
