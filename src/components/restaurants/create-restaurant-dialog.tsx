@@ -23,7 +23,7 @@ export function CreateRestaurantDialog({ categoryId }: { categoryId: string }) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default" size="sm">
+        <Button variant="custom_primary" size="sm">
           <FaPlus className="mr-2" /> Ajouter un restaurant
         </Button>
       </DialogTrigger>

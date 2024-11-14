@@ -1,7 +1,7 @@
 import { Poppins } from "next/font/google";
 import SigninButton from "~/components/auth/signin-button";
 import { Button } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
+import { cn } from "~/components/lib/utils";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -14,16 +14,15 @@ export default function HomePage() {
       <div className="space-y-6 text-center">
         <h1
           className={cn(
-            "text-6xl font-semibold text-slate-500 drop-shadow-md",
+            "text-6xl font-semibold text-primary drop-shadow-md",
             font.className,
           )}
         >
           🍽️ Restaurating
         </h1>
-        <p>Gardez trace et notez vos restaurants.</p>
         <div>
           <SigninButton mode="modal" asChild>
-            <Button variant="secondary" size="lg">
+            <Button variant="custom_primary" size="lg">
               Connexion
             </Button>
           </SigninButton>

@@ -1,8 +1,6 @@
 "use client";
 
-import { deleteCategory } from "~/actions/category-actions";
-
-import { Trash2, TrashIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Button } from "~/components/ui/button";
 import {
@@ -56,7 +54,7 @@ export default function DeleteRestaurantDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
-          variant="destructive"
+          variant="default"
           size="sm"
           aria-label={`Delete ${restaurantId}`}
           className="h-7 px-2"
@@ -72,10 +70,14 @@ export default function DeleteRestaurantDialog({
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant="default" onClick={handleCancel}>
             Non
           </Button>
-          <Button onClick={handleConfirm} disabled={isPending}>
+          <Button
+            onClick={handleConfirm}
+            disabled={isPending}
+            variant="custom_primary"
+          >
             Oui
           </Button>
         </DialogFooter>
