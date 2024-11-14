@@ -1,17 +1,10 @@
-import { getRestaurantCountOfCategory } from "~/server/queries/restaurants";
-
 export default async function RestaurantCounter({
-  categoryIdOrCount,
+  count,
   isInSidebar,
 }: {
-  categoryIdOrCount: number | string;
+  count: number;
   isInSidebar: boolean;
 }) {
-  const count =
-    typeof categoryIdOrCount === "string"
-      ? await getRestaurantCountOfCategory(categoryIdOrCount)
-      : categoryIdOrCount;
-
   const baseClasses =
     "inline-flex items-center justify-center bg-primary/10 text-xs font-medium text-primary ring-1 ring-inset ring-primary/20";
 

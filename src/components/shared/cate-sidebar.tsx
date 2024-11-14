@@ -7,7 +7,7 @@ import { CreateCategoryDialog } from "../categories/create-category-dialog";
 import RestaurantCounter from "~/components/restaurants/restaurant-counter";
 import { slugify } from "~/utils/string-utils";
 
-export default async function Sidebar() {
+export default async function CateSidebar() {
   const categories = await getSpecificUserCategories();
   return (
     <div className="bottom-0 left-0 top-0 w-72 border-r bg-background">
