@@ -1,8 +1,6 @@
 "use client";
 
-import { deleteCategory } from "~/actions/category-actions";
-
-import { Trash2, TrashIcon } from "lucide-react";
+import { TrashIcon } from "lucide-react";
 import { useState, useTransition } from "react";
 import { Button } from "~/components/ui/button";
 import {
