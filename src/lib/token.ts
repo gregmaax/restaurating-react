@@ -1,12 +1,12 @@
 import { eq } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "node:crypto";
 import { db } from "~/server/db";
 import { password_reset_tokens, verification_tokens } from "~/server/db/schema";
 import { getVerificationTokenByEmail } from "~/server/queries/verification-token";
 import { getPasswordResetTokenByEmail } from "~/server/queries/password-reset-token";
 
 export async function generatePasswordResetToken(email: string) {
-  const token = uuidv4();
+  const token = randomUUID();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
   const existingToken = await getPasswordResetTokenByEmail(email);
@@ -26,7 +26,7 @@ export async function generatePasswordResetToken(email: string) {
 }
 
 export async function generateVerificationToken(email: string) {
-  const token = uuidv4();
+  const token = randomUUID();
   const expires = new Date(new Date().getTime() + 3600 * 1000);
 
   const existingToken = await getVerificationTokenByEmail(email);
