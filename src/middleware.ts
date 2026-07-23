@@ -51,5 +51,6 @@ export default auth(
 );
 
 export const config = {
+  runtime: "nodejs",
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
