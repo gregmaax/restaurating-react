@@ -26,9 +26,9 @@ export const settings = async (values: z.infer<typeof SettingsSchema>) => {
   }
 
   if (user.isOAuth) {
-    (values.email = undefined),
-      (values.password = undefined),
-      (values.newPassword = undefined);
+    values.email = undefined;
+    values.password = undefined;
+    values.newPassword = undefined;
   }
 
   if (values.email && values.email !== user.email) {

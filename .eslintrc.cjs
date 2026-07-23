@@ -1,5 +1,6 @@
 /** @type {import("eslint").Linter.Config} */
 const config = {
+  ignorePatterns: ["next-env.d.ts"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: true,
@@ -11,7 +12,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
-    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
     "@typescript-eslint/prefer-nullish-coalescing": "warn",
     "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
     "@typescript-eslint/prefer-optional-chain": "off",

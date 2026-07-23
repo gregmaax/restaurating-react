@@ -6,9 +6,10 @@ export const dynamic = "force-dynamic";
 export default async function CategoryDetailsPage({
   params,
 }: {
-  params: { categorySlug: string };
+  params: Promise<{ categorySlug: string }>;
 }) {
-  const category = await getCategoryBySlug(params.categorySlug);
+  const { categorySlug } = await params;
+  const category = await getCategoryBySlug(categorySlug);
   return (
     <div>
       <CategoryDetails category={category} />
