@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-import { z } from "zod";
+import type { z } from "zod";
 import {
   Form,
   FormControl,
@@ -25,20 +25,23 @@ import {
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import FormError from "../form-error";
-import { Restaurant } from "~/server/db/schema";
+import type { Category, Restaurant } from "~/server/db/schema";
+import { useRouter } from "next/navigation";
 
 export default function RestaurantForm({
   onSuccess,
   categoryId,
   restaurant,
+  categories,
 }: {
   onSuccess: (success: boolean) => void;
   categoryId: string;
   restaurant?: Restaurant;
+  categories?: Category[];
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const router = useRouter();
 
   const isUpdating = !!restaurant;
 
@@ -65,7 +68,6 @@ export default function RestaurantForm({
   function onSubmit(values: z.infer<typeof RestaurantSchema>) {
     console.log("Form submitted with values:", values); // Debug log
     setError("");
-    setSuccess("");
     startTransition(async () => {
       const action = isUpdating ? updateRestaurant : createRestaurant;
       const actionName = isUpdating ? "modifié" : "ajouté";
@@ -76,11 +78,11 @@ export default function RestaurantForm({
           setError(result.error);
           toast.error(result.error);
         } else if (result.success) {
-          setSuccess(result.success);
           toast.success(`Votre restaurant a bien été ${actionName} !`);
           sendSubmitSuccessUp();
+          if (result.redirectTo) router.replace(result.redirectTo);
         }
-      } catch (err) {
+      } catch {
         setError("Erreur inattendue");
         toast.error("Erreur inattendue");
       }
@@ -90,6 +92,36 @@ export default function RestaurantForm({
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="categoryId"
+            render={({ field }) =>
+              isUpdating && categories ? (
+                <FormItem>
+                  <FormLabel>Catégorie</FormLabel>
+                  <FormControl>
+                    <select
+                      {...field}
+                      disabled={isPending}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      {categories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  <FormDescription>
+                    Déplacez ce restaurant vers une autre catégorie.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              ) : (
+                <input type="hidden" {...field} />
+              )
+            }
+          />
           <FormField
             control={form.control}
             name="city"

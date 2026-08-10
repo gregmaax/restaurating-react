@@ -3,6 +3,9 @@
 
 import { sql } from "drizzle-orm";
 import {
+  boolean,
+  check,
+  index,
   integer,
   pgEnum,
   pgTableCreator,
@@ -23,19 +26,71 @@ import type { AdapterAccountType } from "next-auth/adapters";
  */
 export const createTable = pgTableCreator((name) => `${name}`);
 
-export const categories = createTable("category", {
-  id: uuid("id").primaryKey().defaultRandom().notNull(),
-  name: varchar("name", { length: 30 }).notNull(),
-  slug: varchar("slug", { length: 30 }).notNull(),
-  description: varchar("description", { length: 256 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updatedAt", { withTimezone: true }),
-  userId: varchar("userId", { length: 256 }).notNull(),
-});
+export const categoryKindEnum = pgEnum("category_kind", [
+  "ORDINARY",
+  "UNASSIGNED",
+]);
+
+export const categories = createTable(
+  "category",
+  {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    name: varchar("name", { length: 30 }).notNull(),
+    nameKey: varchar("nameKey", { length: 64 }).notNull(),
+    // Kept during the expand phase so the previous deployment remains valid.
+    slug: varchar("slug", { length: 64 }).notNull(),
+    kind: categoryKindEnum("kind").default("ORDINARY").notNull(),
+    description: varchar("description", { length: 256 }),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt", { withTimezone: true }),
+    userId: varchar("userId", { length: 256 }).notNull(),
+  },
+  (category) => ({
+    uniqueNamePerUser: uniqueIndex("category_user_name_key_unique").on(
+      category.userId,
+      category.nameKey,
+    ),
+    oneUnassignedPerUser: uniqueIndex("category_user_unassigned_unique")
+      .on(category.userId)
+      .where(sql`${category.kind} = 'UNASSIGNED'`),
+    reservedUnassignedName: check(
+      "category_reserved_unassigned_name",
+      sql`${category.kind} = 'UNASSIGNED' OR ${category.nameKey} <> 'sans categorie'`,
+    ),
+  }),
+);
 
 export type Category = typeof categories.$inferSelect;
+
+export const categorySlugs = createTable(
+  "category_slug",
+  {
+    id: uuid("id").primaryKey().defaultRandom().notNull(),
+    categoryId: uuid("categoryId")
+      .notNull()
+      .references(() => categories.id, { onDelete: "cascade" }),
+    userId: varchar("userId", { length: 256 }).notNull(),
+    slug: varchar("slug", { length: 64 }).notNull(),
+    isCanonical: boolean("isCanonical").default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (categorySlug) => ({
+    uniqueSlugPerUser: uniqueIndex("category_slug_user_slug_unique").on(
+      categorySlug.userId,
+      categorySlug.slug,
+    ),
+    oneCanonicalPerCategory: uniqueIndex("category_slug_canonical_unique")
+      .on(categorySlug.categoryId)
+      .where(sql`${categorySlug.isCanonical}`),
+    categoryLookup: index("category_slug_category_idx").on(
+      categorySlug.categoryId,
+    ),
+  }),
+);
 
 export const restaurants = createTable(
   "restaurant",
@@ -49,7 +104,10 @@ export const restaurants = createTable(
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt", { withTimezone: true }),
-    categoryId: varchar("categoryId", { length: 256 }).notNull(),
+    categoryId: uuid("categoryId")
+      .notNull()
+      .references(() => categories.id, { onDelete: "restrict" }),
+    // Kept during the expand phase; ownership is derived from Category.
     userId: varchar("userId", { length: 256 }).notNull(),
   },
   (restaurant) => {

@@ -18,10 +18,8 @@ import { deleteRestaurant } from "~/actions/restaurant-actions";
 
 export default function DeleteRestaurantDialog({
   restaurantId,
-  categoryId,
 }: {
   restaurantId: string;
-  categoryId: string;
 }) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -30,14 +28,14 @@ export default function DeleteRestaurantDialog({
   const handleConfirm = () => {
     //logic
     startTransition(async () => {
-      await deleteRestaurant(restaurantId, categoryId).then((data) => {
+      await deleteRestaurant(restaurantId).then((data) => {
         if (data.error) {
           toast.error(data.error);
         }
         if (data.success) {
           toast.success(data.success);
         }
-        router.push(`/categories/${categoryId}`);
+        if (data.redirectTo) router.replace(data.redirectTo);
       });
     });
 

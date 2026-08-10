@@ -10,15 +10,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import { FaPlus } from "react-icons/fa";
 import RestaurantForm from "./restaurant-form";
 import { PencilIcon } from "lucide-react";
-import { Restaurant } from "~/server/db/schema";
+import type { Category, Restaurant } from "~/server/db/schema";
 
 export function UpdateRestaurantDialog({
   restaurant,
+  categories,
 }: {
   restaurant: Restaurant;
+  categories: Category[];
 }) {
   const [open, setOpen] = useState(false);
 
@@ -49,6 +50,7 @@ export function UpdateRestaurantDialog({
           onSuccess={handleSuccess}
           categoryId={restaurant.categoryId}
           restaurant={restaurant}
+          categories={categories}
         />
       </DialogContent>
     </Dialog>

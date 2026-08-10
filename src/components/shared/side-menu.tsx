@@ -24,11 +24,10 @@ import { LogoutButton } from "~/components/auth/logout-button";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
 import { CreateCategoryDialog } from "~/components/categories/create-category-dialog";
-import { slugify } from "~/utils/string-utils";
 import Link from "next/link";
 
 import type { Category } from "~/server/db/schema";
-import { User } from "next-auth";
+import type { User } from "next-auth";
 
 export function SideMenu({
   categories,
@@ -51,7 +50,7 @@ export function SideMenu({
               {categories.map((category) => (
                 <SidebarMenuItem key={category.id}>
                   <SidebarMenuButton asChild>
-                    <Link href={`/categories/${slugify(category.slug)}`}>
+                    <Link href={`/categories/${category.slug}`}>
                       <span className="flex-grow text-left">
                         {category.name}
                       </span>
