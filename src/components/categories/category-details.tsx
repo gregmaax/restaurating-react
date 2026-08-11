@@ -4,14 +4,18 @@ import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog"
 import { getAllRestaurantsByCategoryId } from "~/server/queries/restaurants";
 import RestaurantCounter from "../restaurants/restaurant-counter";
 import { UpdateCategoryDialog } from "./update-category-dialog";
-import { Category } from "~/server/db/schema";
+import type { Category } from "~/server/db/schema";
+import { getSpecificUserCategories } from "~/server/queries/categories";
 
 export default async function CategoryDetails({
   category,
 }: {
   category: Category;
 }) {
-  const restaurants = await getAllRestaurantsByCategoryId(category.id);
+  const [restaurants, categories] = await Promise.all([
+    getAllRestaurantsByCategoryId(category.id),
+    getSpecificUserCategories(),
+  ]);
   const restaurantCount = restaurants.length;
 
   return (
@@ -23,23 +27,25 @@ export default async function CategoryDetails({
               {category.name}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {category.description
-                ? category.description
-                : "Aucune description"}
+              {category.description ?? "Aucune description"}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <RestaurantCounter isInSidebar={false} count={restaurantCount} />
             <div className="flex flex-wrap gap-2">
               <CreateRestaurantDialog categoryId={category.id} />
-              <UpdateCategoryDialog category={category} />
-              <DeleteCategoryDialog categoryId={category.id} />
+              {category.kind === "ORDINARY" ? (
+                <>
+                  <UpdateCategoryDialog category={category} />
+                  <DeleteCategoryDialog categoryId={category.id} />
+                </>
+              ) : null}
             </div>
           </div>
         </div>
       </div>
       <div>
-        <RestaurantList restaurants={restaurants} />
+        <RestaurantList restaurants={restaurants} categories={categories} />
       </div>
     </div>
   );

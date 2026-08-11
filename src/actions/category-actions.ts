@@ -1,96 +1,96 @@
 "use server";
 
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import type { z } from "zod";
 import { auth } from "~/auth";
 import { CategorySchema } from "~/schemas";
-import { db } from "~/server/db";
-import { categories } from "~/server/db/schema";
-import { deleteCategoryById } from "~/server/queries/categories";
-import { capitalize, slugify } from "~/utils/string-utils";
+import { categoryModule } from "~/server/category";
+
+type ActionResult = {
+  error?: string;
+  success?: string;
+  redirectTo?: string;
+};
+
+const categoryFailureMessage = (
+  reason: "validation" | "name_conflict" | "not_found" | "protected_category",
+) => {
+  switch (reason) {
+    case "name_conflict":
+      return "Une catégorie avec ce nom existe déjà !";
+    case "not_found":
+      return "Cette catégorie est introuvable.";
+    case "protected_category":
+      return "La catégorie Sans catégorie ne peut pas être modifiée ou supprimée.";
+    case "validation":
+      return "Erreur ! Champs invalides";
+  }
+};
 
 export const createCategory = async (
   values: z.infer<typeof CategorySchema>,
-) => {
-  //check if there is a loggedin user
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
 
-  //validate fields using zod schemas
-  const validatedFields = CategorySchema.safeParse(values);
+  const validated = CategorySchema.safeParse(values);
+  if (!validated.success) return { error: "Erreur ! Champs invalides" };
 
-  if (!validatedFields.success) {
-    return { error: "Erreur ! Champs invalides" };
-  }
-
-  // Check if the category with the same name already exists
-  const existingCategory = await db.query.categories.findFirst({
-    where: (model, { eq }) => eq(model.name, capitalize(values.name)),
+  const result = await categoryModule.createCategory({
+    userId: session.user.id,
+    values: validated.data,
   });
-
-  if (existingCategory) {
-    return { error: "Une catégorie avec ce nom existe déjà !" };
-  }
-
-  //insert the new category
-  await db.insert(categories).values({
-    name: capitalize(values.name),
-    slug: slugify(values.name),
-    description: values.description,
-    userId: session.user.id!,
-  });
+  if (!result.ok) return { error: categoryFailureMessage(result.reason) };
 
   revalidatePath("/categories");
-
   return { success: "Votre catégorie a bien été enregistrée !" };
 };
 
 export const updateCategory = async (
   values: z.infer<typeof CategorySchema>,
-) => {
-  //check if there is a loggedin user
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
 
-  //action
-  const validatedFields = CategorySchema.safeParse(values);
-
-  if (!validatedFields.success) {
+  const validated = CategorySchema.safeParse(values);
+  if (!validated.success || !validated.data.id) {
     return { error: "Erreur ! Champs invalides" };
   }
 
-  await db
-    .update(categories)
-    .set({
-      name: values.name,
-      description: values.description,
-      updatedAt: new Date(),
-    })
-    .where(eq(categories.id, values.id!));
+  const result = await categoryModule.updateCategory({
+    userId: session.user.id,
+    categoryId: validated.data.id,
+    values: validated.data,
+  });
+  if (!result.ok) return { error: categoryFailureMessage(result.reason) };
 
-  revalidatePath(`/categories/${values.id}`);
-
-  return { success: "Votre catégorie a bien été modifiée !" };
+  const redirectTo = `/categories/${result.category.slug}`;
+  revalidatePath("/categories");
+  revalidatePath(redirectTo);
+  return {
+    success: "Votre catégorie a bien été modifiée !",
+    redirectTo,
+  };
 };
 
-export const deleteCategory = async (categoryId: string) => {
-  //check if there is a loggedin user
+export const deleteCategory = async (
+  categoryId: string,
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
 
-  await deleteCategoryById(categoryId);
+  const result = await categoryModule.deleteCategory({
+    userId: session.user.id,
+    categoryId,
+  });
+  if (!result.ok) return { error: categoryFailureMessage(result.reason) };
 
   revalidatePath("/categories");
-
   return { success: "Votre catégorie a été supprimée !" };
 };

@@ -1,58 +1,22 @@
+import { and, desc, eq } from "drizzle-orm";
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
-import { restaurants } from "../db/schema";
-import { and, eq } from "drizzle-orm";
+import { categories, restaurants } from "../db/schema";
 
 export const getAllRestaurantsByCategoryId = async (categoryId: string) => {
   const user = await currentUser();
   if (!user?.id) throw new Error("Unauthorized");
 
-  //return only the restaurants that matches the loggedIn userId and the categoryId
-  const restaurants = await db.query.restaurants.findMany({
-    where: (model, { eq, and }) =>
-      and(eq(model.categoryId, categoryId), eq(model.userId, user.id!)),
-    orderBy: (model, { desc }) => desc(model.createdAt),
-  });
-
-  return restaurants;
-};
-
-export const getRestaurantCountOfCategory = async (categoryId: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  //return only the restaurants that matches the loggedIn userId and the categoryId
-  const restaurants = await db.query.restaurants.findMany({
-    where: (model, { eq, and }) =>
-      and(eq(model.categoryId, categoryId), eq(model.userId, user.id!)),
-    orderBy: (model, { desc }) => desc(model.createdAt),
-  });
-
-  return restaurants.length;
-};
-
-export const getRestaurantById = async (id: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  const restaurant = await db.query.restaurants.findFirst({
-    where: (model, { eq }) => eq(model.id, id),
-  });
-
-  if (!restaurant) throw new Error("Category not found");
-
-  if (restaurant.userId !== user.id) throw new Error("Unauthorized");
-
-  return restaurant;
-};
-
-export const deleteRestaurantById = async (restaurantId: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  await db
-    .delete(restaurants)
+  return db
+    .select({ restaurant: restaurants })
+    .from(restaurants)
+    .innerJoin(categories, eq(categories.id, restaurants.categoryId))
     .where(
-      and(eq(restaurants.id, restaurantId), eq(restaurants.userId, user.id)),
-    );
+      and(
+        eq(restaurants.categoryId, categoryId),
+        eq(categories.userId, user.id),
+      ),
+    )
+    .orderBy(desc(restaurants.createdAt))
+    .then((rows) => rows.map(({ restaurant }) => restaurant));
 };

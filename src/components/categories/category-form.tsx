@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-import { z } from "zod";
+import type { z } from "zod";
 import {
   Form,
   FormControl,
@@ -21,7 +21,8 @@ import { createCategory, updateCategory } from "~/actions/category-actions";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import FormError from "../form-error";
-import { Category } from "~/server/db/schema";
+import type { Category } from "~/server/db/schema";
+import { useRouter } from "next/navigation";
 
 export default function CategoryForm({
   onSuccess,
@@ -32,7 +33,7 @@ export default function CategoryForm({
 }) {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const router = useRouter();
 
   const isUpdating = !!category;
 
@@ -55,7 +56,6 @@ export default function CategoryForm({
   //what happens on submit
   function onSubmit(values: z.infer<typeof CategorySchema>) {
     setError("");
-    setSuccess("");
     startTransition(async () => {
       const action = isUpdating ? updateCategory : createCategory;
       const actionName = isUpdating ? "modifiée" : "ajoutée";
@@ -66,11 +66,11 @@ export default function CategoryForm({
           setError(result.error);
           toast.error(result.error);
         } else if (result.success) {
-          setSuccess(result.success);
           toast.success(`Votre catégorie a bien été ${actionName} !`);
           sendSubmitSuccessUp();
+          if (result.redirectTo) router.replace(result.redirectTo);
         }
-      } catch (err) {
+      } catch {
         setError("Erreur inattendue");
         toast.error("Erreur inattendue");
       }

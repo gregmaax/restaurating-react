@@ -1,11 +1,5 @@
 import Link from "next/link";
-import {
-  CalendarIcon,
-  Star,
-  StarHalf,
-  PencilIcon,
-  MapPinIcon,
-} from "lucide-react";
+import { CalendarIcon, Star, StarHalf, MapPinIcon } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -14,15 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Restaurant } from "~/server/db/schema";
+import type { Category, Restaurant } from "~/server/db/schema";
 import DeleteRestaurantDialog from "./delete-restaurant-dialog";
-import MessageDisplay from "../shared/message-display";
 import { UpdateRestaurantDialog } from "./update-restaurant-dialog";
 
 export default async function RestaurantList({
   restaurants,
+  categories,
 }: {
   restaurants: Restaurant[];
+  categories: Category[];
 }) {
   if (restaurants.length === 0) {
     return <div className="p-14 text-center">Aucun restaurant ajouté</div>;
@@ -63,9 +58,7 @@ export default async function RestaurantList({
           </CardHeader>
           <CardContent className="flex-grow p-4 pb-2 pt-0">
             <p className="mb-2 line-clamp-2 text-sm text-muted-foreground">
-              {restaurant.description
-                ? restaurant.description
-                : "Aucune description ajoutée"}
+              {restaurant.description ?? "Aucune description ajoutée"}
             </p>
           </CardContent>
           <CardFooter className="flex items-center justify-between px-4 py-2 pt-0">
@@ -74,11 +67,11 @@ export default async function RestaurantList({
               <span>Ajouté le {restaurant.createdAt.toLocaleDateString()}</span>
             </div>
             <div className="flex gap-1">
-              <UpdateRestaurantDialog restaurant={restaurant} />
-              <DeleteRestaurantDialog
-                restaurantId={restaurant.id}
-                categoryId={restaurant.categoryId}
+              <UpdateRestaurantDialog
+                restaurant={restaurant}
+                categories={categories}
               />
+              <DeleteRestaurantDialog restaurantId={restaurant.id} />
             </div>
           </CardFooter>
         </Card>

@@ -1,0 +1,58 @@
+name: Category integration
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  category-integration:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Create isolated Neon branch
+        id: neon
+        uses: neondatabase/create-branch-action@v6
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          parent_branch: main
+          branch_name: test/github-${{ github.run_id }}-${{ github.run_attempt }}
+          database: restaurating_db
+          role: restaurating_db_owner
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Apply tracked migrations
+        run: pnpm db:migrate
+        env:
+          DATABASE_URL: ${{ steps.neon.outputs.db_url }}
+
+      - name: Verify application and Category behaviors
+        run: |
+          pnpm typecheck
+          pnpm test:run
+          pnpm build
+        env:
+          DATABASE_URL: ${{ steps.neon.outputs.db_url }}
+          TEST_DATABASE_URL: ${{ steps.neon.outputs.db_url }}
+
+      - name: Delete isolated Neon branch
+        if: always() && steps.neon.outputs.branch_id != ''
+        uses: neondatabase/delete-branch-action@v3
+        with:
+          project_id: ${{ vars.NEON_PROJECT_ID }}
+          api_key: ${{ secrets.NEON_API_KEY }}
+          branch: ${{ steps.neon.outputs.branch_id }}

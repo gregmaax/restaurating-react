@@ -1,96 +1,88 @@
 "use server";
 
-import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import type { z } from "zod";
 import { auth } from "~/auth";
 import { RestaurantSchema } from "~/schemas";
-import { db } from "~/server/db";
-import { restaurants } from "~/server/db/schema";
-import { deleteRestaurantById } from "~/server/queries/restaurants";
+import { categoryModule } from "~/server/category";
+
+type ActionResult = {
+  error?: string;
+  success?: string;
+  redirectTo?: string;
+};
+
+const restaurantFailureMessage = (reason: "validation" | "not_found") =>
+  reason === "not_found"
+    ? "Ce restaurant ou cette catégorie est introuvable."
+    : "Erreur ! Champs invalides";
 
 export const createRestaurant = async (
   values: z.infer<typeof RestaurantSchema>,
-) => {
-  //check if there is a loggedin user
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
+  const validated = RestaurantSchema.safeParse(values);
+  if (!validated.success) return { error: "Erreur ! Champs invalides" };
 
-  console.log("USER CHECK");
-
-  //action
-  const validatedFields = RestaurantSchema.safeParse(values);
-
-  if (!validatedFields.success) {
-    return { error: "Erreur ! Champs invalides" };
-  }
-
-  await db.insert(restaurants).values({
-    city: values.city,
-    name: values.name,
-    description: values.description,
-    rating: values.rating == undefined ? null : values.rating,
-    categoryId: values.categoryId,
-    userId: session.user.id!,
+  const result = await categoryModule.createRestaurant({
+    userId: session.user.id,
+    values: validated.data,
   });
+  if (!result.ok) return { error: restaurantFailureMessage(result.reason) };
 
-  console.log("DONE");
-
-  revalidatePath(`/categories/${values.categoryId}`);
-
-  return { success: "Votre restaurant a bien été ajouté !" };
+  const redirectTo = `/categories/${result.restaurant.category.slug}`;
+  revalidatePath(redirectTo);
+  return {
+    success: "Votre restaurant a bien été ajouté !",
+    redirectTo,
+  };
 };
 
 export const updateRestaurant = async (
   values: z.infer<typeof RestaurantSchema>,
-) => {
-  //check if there is a loggedin user
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
-
-  //action
-  const validatedFields = RestaurantSchema.safeParse(values);
-
-  if (!validatedFields.success) {
+  const validated = RestaurantSchema.safeParse(values);
+  if (!validated.success || !validated.data.id) {
     return { error: "Erreur ! Champs invalides" };
   }
 
-  await db
-    .update(restaurants)
-    .set({
-      name: values.name,
-      description: values.description,
-      city: values.city,
-      rating: values.rating,
-      updatedAt: new Date(),
-    })
-    .where(eq(restaurants.id, values.id!));
+  const result = await categoryModule.updateRestaurant({
+    userId: session.user.id,
+    restaurantId: validated.data.id,
+    values: validated.data,
+  });
+  if (!result.ok) return { error: restaurantFailureMessage(result.reason) };
 
-  revalidatePath(`/categories/${values.categoryId}`);
-
-  return { success: "Votre restaurant a bien été modifié !" };
+  const redirectTo = `/categories/${result.restaurant.category.slug}`;
+  revalidatePath(redirectTo);
+  return {
+    success: "Votre restaurant a bien été modifié !",
+    redirectTo,
+  };
 };
 
 export const deleteRestaurant = async (
   restaurantId: string,
-  categoryId: string,
-) => {
-  //check if there is a loggedin user
+): Promise<ActionResult> => {
   const session = await auth();
-
-  if (!session || !session.user) {
+  if (!session?.user?.id) {
     return { error: "Vous devez être connecté pour effectuer cette action !" };
   }
 
-  await deleteRestaurantById(restaurantId);
+  const result = await categoryModule.deleteRestaurant({
+    userId: session.user.id,
+    restaurantId,
+  });
+  if (!result.ok) return { error: restaurantFailureMessage(result.reason) };
 
-  revalidatePath(`/categories/${categoryId}`);
-
-  return { success: "Votre restaurant a été supprimé !" };
+  const redirectTo = `/categories/${result.category.slug}`;
+  revalidatePath(redirectTo);
+  return { success: "Votre restaurant a été supprimé !", redirectTo };
 };

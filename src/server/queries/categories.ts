@@ -1,61 +1,30 @@
+import { and, desc, eq, sql } from "drizzle-orm";
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
-import { categories } from "../db/schema";
-import { and, eq } from "drizzle-orm";
-
-export const getAllCategories = async () => {
-  const categories = await db.query.categories.findMany();
-
-  return categories;
-};
+import { categories, categorySlugs } from "../db/schema";
 
 export const getSpecificUserCategories = async () => {
   const user = await currentUser();
   if (!user?.id) throw new Error("Unauthorized");
 
-  const categories = await db.query.categories.findMany({
-    where: (model, { eq }) => eq(model.userId, user.id!),
-    orderBy: (model, { desc }) => desc(model.createdAt),
-  });
+  const rows = await db
+    .select({ category: categories, canonicalSlug: categorySlugs.slug })
+    .from(categories)
+    .innerJoin(
+      categorySlugs,
+      and(
+        eq(categorySlugs.categoryId, categories.id),
+        eq(categorySlugs.isCanonical, true),
+      ),
+    )
+    .where(eq(categories.userId, user.id))
+    .orderBy(
+      sql`case when ${categories.kind} = 'UNASSIGNED' then 1 else 0 end`,
+      desc(categories.createdAt),
+    );
 
-  return categories;
-};
-
-export const getCategoryById = async (id: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  const category = await db.query.categories.findFirst({
-    where: (model, { eq }) => eq(model.id, id),
-  });
-
-  if (!category) throw new Error("Category not found");
-
-  if (category.userId !== user.id) throw new Error("Unauthorized");
-
-  return category;
-};
-
-export const getCategoryBySlug = async (slug: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  const category = await db.query.categories.findFirst({
-    where: (model, { eq }) => eq(model.slug, slug),
-  });
-
-  if (!category) throw new Error("Category not found");
-
-  if (category.userId !== user.id) throw new Error("Unauthorized");
-
-  return category;
-};
-
-export const deleteCategoryById = async (categoryId: string) => {
-  const user = await currentUser();
-  if (!user?.id) throw new Error("Unauthorized");
-
-  await db
-    .delete(categories)
-    .where(and(eq(categories.id, categoryId), eq(categories.userId, user.id)));
+  return rows.map(({ category, canonicalSlug }) => ({
+    ...category,
+    slug: canonicalSlug,
+  }));
 };
