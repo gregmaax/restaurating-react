@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
 import { categories, categorySlugs } from "../db/schema";
@@ -18,7 +18,10 @@ export const getSpecificUserCategories = async () => {
       ),
     )
     .where(eq(categories.userId, user.id))
-    .orderBy(desc(categories.createdAt));
+    .orderBy(
+      sql`case when ${categories.kind} = 'UNASSIGNED' then 1 else 0 end`,
+      desc(categories.createdAt),
+    );
 
   return rows.map(({ category, canonicalSlug }) => ({
     ...category,
