@@ -10,6 +10,7 @@
     "build": "next build",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "pnpm db:preflight && drizzle-kit migrate",
+    "db:migrate:deploy": "node scripts/assert-vercel-deployment.mjs && pnpm db:migrate",
     "db:preflight": "node scripts/preflight-category-lifecycle.mjs",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
@@ -19,7 +20,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "typecheck": "tsc --noEmit",
-    "vercel-build": "next build"
+    "vercel-build": "pnpm db:migrate:deploy && next build"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",
