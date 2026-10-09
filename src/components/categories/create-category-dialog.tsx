@@ -1,41 +1,30 @@
 "use client";
-
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import CategoryForm from "./category-form";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { FaPlus } from "react-icons/fa";
+import { EditorPanel } from "../shared/editor-panel";
 
-export function CreateCategoryDialog() {
+export function CreateCategoryDialog({
+  className = "w-full",
+}: {
+  className?: string;
+}) {
   const [open, setOpen] = useState(false);
-
-  //handle the prop
-  function handleSuccess() {
-    setOpen(false);
-  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="custom_primary" className="w-full">
-          <FaPlus className="mr-2" /> Nouvelle catégorie
+    <EditorPanel
+      open={open}
+      onOpenChange={setOpen}
+      title="Nouvelle catégorie"
+      description="Regroupez vos restaurants par cuisine, par occasion ou simplement selon vos envies."
+      trigger={
+        <Button className={className}>
+          <Plus />
+          Nouvelle catégorie
         </Button>
-      </DialogTrigger>
-      <DialogContent className="w-11/12 rounded sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Créer une catégorie</DialogTitle>
-          <DialogDescription className="hidden">
-            Modale de création de catégorie.
-          </DialogDescription>
-        </DialogHeader>
-        <CategoryForm onSuccess={handleSuccess} />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <CategoryForm onSuccess={() => setOpen(false)} />
+    </EditorPanel>
   );
 }

@@ -1,7 +1,7 @@
 export const metadata = {
   title: "Restaurating",
-  description: "Next.js playground for a restaurant app",
-  icons: [{ rel: "icon", url: "./favicon.ico" }],
+  description: "Votre carnet personnel de restaurants.",
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
 export default function AuthLayout({
@@ -10,6 +10,6 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-full items-center justify-center">{children}</div>
+    <div className="flex min-h-svh items-center justify-center">{children}</div>
   );
 }

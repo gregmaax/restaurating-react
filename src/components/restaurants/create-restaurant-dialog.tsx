@@ -1,41 +1,37 @@
 "use client";
-
 import { useState } from "react";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { FaPlus } from "react-icons/fa";
+import { Plus } from "lucide-react";
 import RestaurantForm from "./restaurant-form";
+import { Button } from "../ui/button";
+import { EditorPanel } from "../shared/editor-panel";
+import type { Category } from "~/server/db/schema";
 
-export function CreateRestaurantDialog({ categoryId }: { categoryId: string }) {
+export function CreateRestaurantDialog({
+  categoryId,
+  categories,
+}: {
+  categoryId: string;
+  categories?: Category[];
+}) {
   const [open, setOpen] = useState(false);
-
-  //handle the prop
-  function handleSuccess() {
-    setOpen(false);
-  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="custom_primary" size="sm">
-          <FaPlus className="mr-2" /> Ajouter un restaurant
+    <EditorPanel
+      open={open}
+      onOpenChange={setOpen}
+      title="Ajouter un restaurant"
+      description="Une table à essayer ou un repas à retenir ? Ajoutez-la à votre carnet."
+      trigger={
+        <Button>
+          <Plus />
+          Ajouter un restaurant
         </Button>
-      </DialogTrigger>
-      <DialogContent className="w-11/12 rounded sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Ajouter un restaurant</DialogTitle>
-          <DialogDescription className="hidden">
-            Modale d&apos;ajout de restaurant.
-          </DialogDescription>
-        </DialogHeader>
-        <RestaurantForm onSuccess={handleSuccess} categoryId={categoryId} />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <RestaurantForm
+        onSuccess={() => setOpen(false)}
+        categoryId={categoryId}
+        categories={categories}
+      />
+    </EditorPanel>
   );
 }

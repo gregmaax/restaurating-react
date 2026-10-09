@@ -28,7 +28,7 @@ export default function Social() {
           onClick("google");
         }}
       >
-        <FcGoogle className="h-5 w-5" />
+        <FcGoogle className="h-5 w-5" /> Continuer avec Google
       </Button>
       <Button
         size={"lg"}

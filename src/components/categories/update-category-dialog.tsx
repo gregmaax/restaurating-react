@@ -1,44 +1,27 @@
 "use client";
-
 import { useState } from "react";
+import { Pencil } from "lucide-react";
+import type { Category } from "~/server/db/schema";
 import CategoryForm from "./category-form";
 import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import { FaPlus } from "react-icons/fa";
-import { Pencil } from "lucide-react";
-import { Category } from "~/server/db/schema";
+import { EditorPanel } from "../shared/editor-panel";
 
 export function UpdateCategoryDialog({ category }: { category: Category }) {
   const [open, setOpen] = useState(false);
-
-  //handle the prop
-  function handleSuccess() {
-    setOpen(false);
-  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm" variant="outline">
-          <Pencil className="mr-2 h-4 w-4" />
+    <EditorPanel
+      open={open}
+      onOpenChange={setOpen}
+      title="Modifier la catégorie"
+      description="Un nouveau nom, une nouvelle envie. Vos restaurants restent dans cette catégorie."
+      trigger={
+        <Button variant="outline" size="sm">
+          <Pencil />
           Modifier
         </Button>
-      </DialogTrigger>
-      <DialogContent className="w-11/12 rounded sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Modifier une catégorie</DialogTitle>
-          <DialogDescription className="hidden">
-            Modale de modification de catégorie.
-          </DialogDescription>
-        </DialogHeader>
-        <CategoryForm onSuccess={handleSuccess} category={category} />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <CategoryForm onSuccess={() => setOpen(false)} category={category} />
+    </EditorPanel>
   );
 }

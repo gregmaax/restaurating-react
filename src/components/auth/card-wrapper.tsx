@@ -27,11 +27,11 @@ export default function CardWrapper({
   showSocial,
 }: CardWrapperProps) {
   return (
-    <Card className="w-[400px] shadow-md">
+    <Card className="w-full max-w-[420px] rounded-2xl border bg-white p-3 shadow-[0_12px_60px_rgba(104,64,39,0.07)]">
       <CardHeader>
         <Header label={headerLabel} />
       </CardHeader>
-      <CardContent>{children}</CardContent>
+      <CardContent className="pb-7">{children}</CardContent>
       {showSocial && (
         <CardFooter>
           <Social />

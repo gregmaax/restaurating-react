@@ -1,13 +1,14 @@
 import { auth } from "~/auth";
+import { cache } from "react";
 
-export async function currentUser() {
+// React shares this promise within a server render, never across requests/users.
+export const currentUser = cache(async () => {
   const session = await auth();
 
   return session?.user;
-}
+});
 
 export async function currentRole() {
-  const session = await auth();
-
-  return session?.user.role;
+  const user = await currentUser();
+  return user?.role;
 }

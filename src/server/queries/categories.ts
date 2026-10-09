@@ -2,8 +2,9 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { currentUser } from "~/lib/auth";
 import { db } from "../db";
 import { categories, categorySlugs } from "../db/schema";
+import { cache } from "react";
 
-export const getSpecificUserCategories = async () => {
+export const getSpecificUserCategories = cache(async () => {
   const user = await currentUser();
   if (!user?.id) throw new Error("Unauthorized");
 
@@ -27,4 +28,4 @@ export const getSpecificUserCategories = async () => {
     ...category,
     slug: canonicalSlug,
   }));
-};
+});

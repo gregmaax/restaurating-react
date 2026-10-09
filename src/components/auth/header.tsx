@@ -1,22 +1,10 @@
-import { Poppins } from "next/font/google";
-import { cn } from "~/components/lib/utils";
+import { Brand } from "~/components/shared/brand";
 
-const font = Poppins({
-  subsets: ["latin"],
-  weight: ["600"],
-});
-
-interface HeaderProps {
-  label: string;
-}
-
-export default function Header({ label }: HeaderProps) {
+export default function Header({ label }: { label: string }) {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-y-4">
-      <h1 className={cn("text-3xl font-semibold", font.className)}>
-        🔐 Identifiez-vous
-      </h1>
-      <p className="text-sm text-muted-foreground">{label}</p>
+    <div className="flex w-full flex-col items-center gap-5">
+      <Brand />
+      <h1 className="text-2xl font-semibold tracking-tight">{label}</h1>
     </div>
   );
 }
