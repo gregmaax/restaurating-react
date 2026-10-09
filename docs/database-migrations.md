@@ -5,6 +5,15 @@ The command runs the Category lifecycle data audit before Drizzle applies any
 pending migration. `db:push` is reserved for local schema exploration and must
 not be used for shared environments.
 
+Database commands load `.env`, then `.env.local`, just like the local application.
+An existing `DATABASE_URL` in the process environment takes precedence, so CI and
+Vercel continue to use the database supplied by their environment.
+For local development, set `DATABASE_URL` in `.env.local` to a dedicated Neon dev
+branch and run `pnpm db:migrate` before starting the application.
+`pnpm dev` checks the required tables and columns first. If the schema is out of
+date, it stops with instructions to migrate the dev database. This check is
+read-only; starting the app never applies migrations automatically.
+
 ## Environments
 
 Dev, preview, and production remain databases in the existing Neon project. CI

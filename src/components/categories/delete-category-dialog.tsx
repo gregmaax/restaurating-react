@@ -27,32 +27,34 @@ export default function DeleteCategoryDialog({
   const router = useRouter();
 
   const handleConfirm = () => {
-    //logic
     startTransition(async () => {
-      await deleteCategory(categoryId).then((data) => {
+      try {
+        const data = await deleteCategory(categoryId);
         if (data.error) {
           toast.error(data.error);
+          return;
         }
         if (data.success) {
           toast.success(data.success);
+          setOpen(false);
+          router.push("/categories");
         }
-        router.push("/categories");
-      });
+      } catch {
+        toast.error("La suppression a échoué. Réessayez.");
+      }
     });
-
-    //close modal
-    setOpen(false);
   };
 
-  const handleCancel = () => {
-    console.log("Action cancelled");
-    setOpen(false);
-  };
+  const handleCancel = () => setOpen(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="default">
+        <Button
+          size="sm"
+          variant="ghost"
+          className="text-muted-foreground hover:bg-red-50 hover:text-destructive"
+        >
           <Trash2 className="mr-2 h-4 w-4" />
           Supprimer
         </Button>
@@ -61,19 +63,20 @@ export default function DeleteCategoryDialog({
         <DialogHeader>
           <DialogTitle>Supprimer une catégorie</DialogTitle>
           <DialogDescription>
-            Voulez-vous continuer ? Cette action est irréversible.
+            La catégorie sera supprimée. Ses restaurants seront conservés dans «
+            Sans catégorie ».
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="default" onClick={handleCancel}>
-            Non
+            Annuler
           </Button>
           <Button
             onClick={handleConfirm}
             disabled={isPending}
-            variant="custom_primary"
+            variant="destructive"
           >
-            Oui
+            Supprimer la catégorie
           </Button>
         </DialogFooter>
       </DialogContent>

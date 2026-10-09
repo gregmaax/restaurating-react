@@ -84,11 +84,12 @@ export const {
       //meaning that we are logged out
       if (!token.sub) return token;
 
-      const existingUser = await getUserById(token.sub);
+      const [existingUser, existingAccount] = await Promise.all([
+        getUserById(token.sub),
+        getAccountByUserId(token.sub),
+      ]);
 
       if (!existingUser) return token;
-
-      const existingAccount = await getAccountByUserId(existingUser.id);
 
       token.isOAuth = !!existingAccount;
       token.name = existingUser.name;

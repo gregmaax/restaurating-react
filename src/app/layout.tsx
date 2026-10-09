@@ -22,7 +22,7 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="fr" className={`${GeistSans.variable} bg-panda-light-yellow`}>
+      <html lang="fr" className={GeistSans.variable}>
         <head>
           <link
             rel="icon"
@@ -41,7 +41,7 @@ export default async function RootLayout({
           <title>Restaurating</title>
         </head>
         <body>
-          <main>{children}</main>
+          {children}
           <Toaster richColors />
         </body>
       </html>

@@ -41,7 +41,7 @@ export default function CategoryForm({
   const form = useForm<z.infer<typeof CategorySchema>>({
     resolver: zodResolver(CategorySchema),
     defaultValues: {
-      id: category?.id! ?? "",
+      id: category?.id ?? "",
       name: category?.name ?? "",
       description: category?.description ?? "",
     },
@@ -87,10 +87,14 @@ export default function CategoryForm({
               <FormItem>
                 <FormLabel>Nom</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isPending} />
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Brunchs, cuisine italienne, à essayer…"
+                  />
                 </FormControl>
                 <FormDescription>
-                  Entrez le nom de votre catégorie.
+                  Choisissez un nom qui vous ressemble.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -101,10 +105,15 @@ export default function CategoryForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Description{" "}
+                  <span className="font-normal text-muted-foreground">
+                    facultative
+                  </span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Entrez une description..."
+                    placeholder="Quelles tables allez-vous réunir ici ?"
                     {...field}
                     disabled={isPending}
                   />
@@ -115,7 +124,11 @@ export default function CategoryForm({
           />
           <FormError message={error} />
           <Button type="submit" disabled={isPending} variant="custom_primary">
-            {!isUpdating ? "Enregistrer" : "Modifier"}
+            {isPending
+              ? "Enregistrement…"
+              : !isUpdating
+                ? "Créer la catégorie"
+                : "Enregistrer les modifications"}
           </Button>
         </form>
       </Form>

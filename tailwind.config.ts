@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss"
-import tailwindcssAnimate from "tailwindcss-animate"
+import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config = {
   darkMode: ["class"],
@@ -20,6 +20,12 @@ const config = {
     },
     extend: {
       colors: {
+        coral: "#E94E35",
+        peach: "#FF906A",
+        honey: "#FFD15C",
+        ivory: "#FFF9EA",
+        sand: "#DFD3BA",
+        cocoa: "#684027",
         "panda-light-yellow": "#FDFCEF",
         "panda-mid-yellow": "#F6E458",
         "panda-strong-yellow": "#FDE047",
@@ -99,4 +105,4 @@ const config = {
   plugins: [tailwindcssAnimate],
 } satisfies Config;
 
-export default config
+export default config;

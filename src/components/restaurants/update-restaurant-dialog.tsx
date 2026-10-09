@@ -1,18 +1,10 @@
 "use client";
-
 import { useState } from "react";
-import { Button } from "../ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../ui/dialog";
-import RestaurantForm from "./restaurant-form";
-import { PencilIcon } from "lucide-react";
+import { Pencil } from "lucide-react";
 import type { Category, Restaurant } from "~/server/db/schema";
+import RestaurantForm from "./restaurant-form";
+import { Button } from "../ui/button";
+import { EditorPanel } from "../shared/editor-panel";
 
 export function UpdateRestaurantDialog({
   restaurant,
@@ -22,37 +14,29 @@ export function UpdateRestaurantDialog({
   categories: Category[];
 }) {
   const [open, setOpen] = useState(false);
-
-  //handle the prop
-  function handleSuccess() {
-    setOpen(false);
-  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <EditorPanel
+      open={open}
+      onOpenChange={setOpen}
+      title={restaurant.name}
+      description="Mettez à jour les détails, changez de catégorie ou gardez une note de votre dernier repas."
+      trigger={
         <Button
-          variant="outline"
-          size="sm"
-          className="h-7 px-2"
-          aria-label={`Edit ${restaurant.id}`}
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9 text-muted-foreground"
+          aria-label={`Modifier ${restaurant.name}`}
         >
-          <PencilIcon className="h-3 w-3" />
+          <Pencil />
         </Button>
-      </DialogTrigger>
-      <DialogContent className="w-11/12 rounded sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Modifier un restaurant</DialogTitle>
-          <DialogDescription className="hidden">
-            Modale de modification d&apos;un restaurant.
-          </DialogDescription>
-        </DialogHeader>
-        <RestaurantForm
-          onSuccess={handleSuccess}
-          categoryId={restaurant.categoryId}
-          restaurant={restaurant}
-          categories={categories}
-        />
-      </DialogContent>
-    </Dialog>
+      }
+    >
+      <RestaurantForm
+        onSuccess={() => setOpen(false)}
+        categoryId={restaurant.categoryId}
+        restaurant={restaurant}
+        categories={categories}
+      />
+    </EditorPanel>
   );
 }

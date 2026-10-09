@@ -2,10 +2,10 @@ import DeleteCategoryDialog from "./delete-category-dialog";
 import RestaurantList from "../restaurants/restaurants-list";
 import { CreateRestaurantDialog } from "../restaurants/create-restaurant-dialog";
 import { getAllRestaurantsByCategoryId } from "~/server/queries/restaurants";
-import RestaurantCounter from "../restaurants/restaurant-counter";
 import { UpdateCategoryDialog } from "./update-category-dialog";
 import type { Category } from "~/server/db/schema";
 import { getSpecificUserCategories } from "~/server/queries/categories";
+import { CollectionStats } from "../collection/collection-stats";
 
 export default async function CategoryDetails({
   category,
@@ -16,37 +16,27 @@ export default async function CategoryDetails({
     getAllRestaurantsByCategoryId(category.id),
     getSpecificUserCategories(),
   ]);
-  const restaurantCount = restaurants.length;
-
   return (
-    <div className="mx-auto flex flex-col">
-      <div className="w-full px-4 py-6 md:px-6">
-        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-          <div className="space-y-1">
-            <h2 className="text-2xl font-bold tracking-tight">
-              {category.name}
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              {category.description ?? "Aucune description"}
-            </p>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <RestaurantCounter isInSidebar={false} count={restaurantCount} />
-            <div className="flex flex-wrap gap-2">
-              <CreateRestaurantDialog categoryId={category.id} />
-              {category.kind === "ORDINARY" ? (
-                <>
-                  <UpdateCategoryDialog category={category} />
-                  <DeleteCategoryDialog categoryId={category.id} />
-                </>
-              ) : null}
-            </div>
-          </div>
+    <>
+      <div className="flex flex-wrap items-start justify-between gap-5">
+        <div>
+          <h1 className="page-title">{category.name}</h1>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            {category.description?.trim()
+              ? category.description
+              : "Toutes les bonnes adresses de cette catégorie."}
+          </p>
         </div>
+        <CreateRestaurantDialog categoryId={category.id} />
       </div>
-      <div>
-        <RestaurantList restaurants={restaurants} categories={categories} />
-      </div>
-    </div>
+      {category.kind === "ORDINARY" && (
+        <div className="mt-5 flex gap-2">
+          <UpdateCategoryDialog category={category} />
+          <DeleteCategoryDialog categoryId={category.id} />
+        </div>
+      )}
+      <CollectionStats restaurants={restaurants} />
+      <RestaurantList restaurants={restaurants} categories={categories} />
+    </>
   );
 }

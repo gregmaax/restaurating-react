@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "~/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { Star } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { RestaurantSchema } from "~/schemas";
 import {
@@ -49,10 +50,10 @@ export default function RestaurantForm({
   const form = useForm<z.infer<typeof RestaurantSchema>>({
     resolver: zodResolver(RestaurantSchema),
     defaultValues: {
-      id: restaurant?.id! ?? "",
+      id: restaurant?.id ?? "",
       city: restaurant?.city ?? "",
       name: restaurant?.name ?? "",
-      description: restaurant?.description! ?? "",
+      description: restaurant?.description ?? "",
       rating: restaurant?.rating ?? undefined,
       categoryId: restaurant?.categoryId ?? categoryId,
     },
@@ -66,7 +67,6 @@ export default function RestaurantForm({
 
   //what happens on submit
   function onSubmit(values: z.infer<typeof RestaurantSchema>) {
-    console.log("Form submitted with values:", values); // Debug log
     setError("");
     startTransition(async () => {
       const action = isUpdating ? updateRestaurant : createRestaurant;
@@ -96,14 +96,14 @@ export default function RestaurantForm({
             control={form.control}
             name="categoryId"
             render={({ field }) =>
-              isUpdating && categories ? (
+              categories ? (
                 <FormItem>
                   <FormLabel>Catégorie</FormLabel>
                   <FormControl>
                     <select
                       {...field}
                       disabled={isPending}
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      className="flex h-10 w-full rounded-md border border-input bg-background py-2 pl-3 pr-10 text-sm"
                     >
                       {categories.map((category) => (
                         <option key={category.id} value={category.id}>
@@ -113,7 +113,9 @@ export default function RestaurantForm({
                     </select>
                   </FormControl>
                   <FormDescription>
-                    Déplacez ce restaurant vers une autre catégorie.
+                    {isUpdating
+                      ? "Déplacez ce restaurant vers une autre catégorie."
+                      : "Choisissez où ranger ce restaurant."}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -124,29 +126,37 @@ export default function RestaurantForm({
           />
           <FormField
             control={form.control}
-            name="city"
+            name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ville</FormLabel>
+                <FormLabel>Nom</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isPending} />
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Le nom de cette bonne table"
+                  />
                 </FormControl>
+                <FormDescription>
+                  Le nom qui vous permettra de le retrouver.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="name"
+            name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Nom</FormLabel>
+                <FormLabel>Ville</FormLabel>
                 <FormControl>
-                  <Input {...field} disabled={isPending} />
+                  <Input
+                    {...field}
+                    disabled={isPending}
+                    placeholder="Paris, Lyon, Bordeaux…"
+                  />
                 </FormControl>
-                <FormDescription>
-                  Entrez le nom de votre restaurant.
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -156,10 +166,15 @@ export default function RestaurantForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>
+                  Votre souvenir{" "}
+                  <span className="font-normal text-muted-foreground">
+                    facultatif
+                  </span>
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Entrez une description..."
+                    placeholder="Le plat à reprendre, l’ambiance, la table près de la fenêtre…"
                     {...field}
                     disabled={isPending}
                   />
@@ -173,14 +188,20 @@ export default function RestaurantForm({
             name="rating"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Note</FormLabel>
+                <FormLabel>
+                  Votre note{" "}
+                  <span className="font-normal text-muted-foreground">
+                    facultative
+                  </span>
+                </FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={(value) =>
                       field.onChange(parseInt(value, 10))
                     }
-                    value={field.value?.toString()}
-                    className="flex space-x-2"
+                    value={field.value?.toString() ?? ""}
+                    className="flex gap-2"
+                    aria-label="Votre note sur 5"
                     disabled={isPending}
                   >
                     {[1, 2, 3, 4, 5].map((rating) => (
@@ -188,18 +209,20 @@ export default function RestaurantForm({
                         <FormControl>
                           <RadioGroupItem
                             value={rating.toString()}
-                            className="sr-only"
+                            className="peer sr-only"
+                            aria-label={`${rating} étoile${rating > 1 ? "s" : ""} sur 5`}
                             id={`rating-${rating}`}
                           />
                         </FormControl>
                         <FormLabel
                           htmlFor={`rating-${rating}`}
-                          className={`flex h-10 w-10 items-center justify-center rounded-sm border ${
+                          className={`flex h-12 w-12 items-center justify-center gap-1 rounded-lg border peer-focus-visible:ring-2 peer-focus-visible:ring-primary peer-focus-visible:ring-offset-2 ${
                             field.value === rating
                               ? "border-primary bg-primary text-primary-foreground"
                               : "border-input bg-background hover:bg-muted/80"
                           } cursor-pointer transition-colors`}
                         >
+                          <Star className="h-3.5 w-3.5" aria-hidden="true" />
                           {rating}
                         </FormLabel>
                       </FormItem>
@@ -210,9 +233,28 @@ export default function RestaurantForm({
               </FormItem>
             )}
           />
+          {form.watch("rating") != null && (
+            <button
+              type="button"
+              disabled={isPending}
+              className="text-xs text-muted-foreground underline underline-offset-4"
+              onClick={() =>
+                form.setValue("rating", undefined, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                })
+              }
+            >
+              Retirer la note
+            </button>
+          )}
           <FormError message={error} />
           <Button type="submit" disabled={isPending} variant="custom_primary">
-            {!isUpdating ? "Enregistrer" : "Modifier"}
+            {isPending
+              ? "Enregistrement…"
+              : !isUpdating
+                ? "Ajouter le restaurant"
+                : "Enregistrer les modifications"}
           </Button>
         </form>
       </Form>

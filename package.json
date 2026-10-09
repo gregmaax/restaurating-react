@@ -4,17 +4,18 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=20"
+    "node": "24.x"
   },
   "scripts": {
     "build": "next build",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "pnpm db:preflight && drizzle-kit migrate",
+    "db:check": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/check-database.mjs",
+    "db:generate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/database.mjs generate",
+    "db:migrate": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/database.mjs migrate",
     "db:migrate:deploy": "node scripts/assert-vercel-deployment.mjs && pnpm db:migrate",
-    "db:preflight": "node scripts/preflight-category-lifecycle.mjs",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio",
-    "dev": "next dev",
+    "db:preflight": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/preflight-category-lifecycle.mjs",
+    "db:push": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/database.mjs push",
+    "db:studio": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/database.mjs studio",
+    "dev": "pnpm db:check && next dev",
     "lint": "eslint . --ext .js,.cjs,.ts,.tsx",
     "start": "next start",
     "test": "vitest",
@@ -62,7 +63,7 @@
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/eslint": "^8.56.12",
-    "@types/node": "^20.19.43",
+    "@types/node": "^24.19.2",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
